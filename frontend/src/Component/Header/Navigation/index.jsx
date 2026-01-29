@@ -4,7 +4,7 @@ import { CiMenuBurger } from 'react-icons/ci'
 import { FaAngleDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { GoRocket } from "react-icons/go";
-import CategoryPanel from './categoryPanel';
+import CategoryPanel from './CategoryPanel';
 import '../Navigation/style.css'
 
 const Navigation = () => {
