@@ -1,0 +1,49 @@
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
+import helmet from "helmet";
+import dotenv from "dotenv";
+dotenv.config();
+import connectDB from "./config/connectDb.js";
+import userRouter from './Router/userRoute.js'
+import catRouter from './Router/catRoute.js'
+import productRouter from './Router/productRoute.js'
+import cartProductRouter from './Router/cartProductRoute.js'
+import myListRouter from './Router/myListRoute.js'
+
+
+const app = express();
+const PORT = process.env.PORT || 7000;
+// Middleware
+app.use(cors(
+//     {
+//   origin: process.env.FRONTEND_URL,
+//   credentials: true
+// }
+));
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(morgan("dev"));
+app.use(helmet({
+  crossOriginResourcePolicy: false
+}));
+
+connectDB();
+
+// app.use("/api/users", userRoutes);
+
+app.get("/", (req, res) => {
+  res.json({ message: `Server is running on port ${PORT}` });
+});
+
+app.use('/api/user',userRouter)
+app.use('/api/category',catRouter)
+app.use('/api/product',productRouter)
+app.use('/api/cartProduct',cartProductRouter)
+app.use('/api/myList',myListRouter)
+
+app.listen(PORT, () => {
+  console.log(` Server running on  ${PORT}`);
+});

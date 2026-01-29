@@ -1,0 +1,6 @@
+.searchbox input::placeholder,.searchbox input::-moz-placeholder,.searchbox input::-webkit-input-placeholder{
+    color: #373737 !important;
+}
+
+
+
