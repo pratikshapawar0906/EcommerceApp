@@ -92,7 +92,7 @@ const Header = () => {
                 </li>
                 :
                 <>
-                 <Button className="!text-[#000] myAccountWrap flex items-center gap-3 cursor-pointer"
+                 <div className="!text-[#000] myAccountWrap flex items-center gap-3 cursor-pointer"
                  onClick={handleClick}>
                   <Button className='!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-[#f1f1f1]'>
                     <FaRegUser className='text-[16px] text-[rgba(0,0,0,0.7)]'/></Button>
@@ -101,7 +101,7 @@ const Header = () => {
                       <h4 className="text-[14px] font-[500]  text-[rgba(0,0,0,0.6)]capitalize text-left justify-start">abd tikas</h4>
                      
                     </div>
-                 </Button>
+                 </div>
 
                   <Menu
                     anchorEl={anchorEl}

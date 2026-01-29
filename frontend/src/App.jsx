@@ -32,6 +32,7 @@ const App = () => {
   const [fullWidth, setFullWidth] = useState(true);
   const [openCartPanel, setOpenCartPanel] =useState(false);
   const[isLogin, setIsLogin]=useState(true)
+  const apiUrl=import.meta.env.VITE_API_URL
 
 
   const handleCloseProductDetailsModel = () => {
@@ -42,23 +43,24 @@ const App = () => {
     setOpenCartPanel(newOpen);
   };
 
-  const openAlertBox=(status,msg)=>{
-    if(status==="success"){
+  const alertBox=(type,msg)=>{
+    if(type==="success"){
       toast.success(msg)
     }
-    if(status==="error"){
+    if(type==="error"){
       toast.error(msg)
     }
     
   }
+  
   const Values={
     setOpenProductDetailsModel,
     setOpenCartPanel,
     openCartPanel,
     toggleCartPanel,
-    openAlertBox,
     isLogin,
-    setIsLogin
+    setIsLogin,
+    alertBox
     
   }
   return (
@@ -73,13 +75,13 @@ const App = () => {
            <Route path={"/productDetails/:id"} exact={true} element={<ProductDetails/>} />
            <Route path={"/login"} exact={true} element={<Login/>} />
            <Route path={"/register"} exact={true} element={<Register/>} />
-           <Route path={"/cart"} exactv={true} element={<Cart/>} />
-           <Route path={"/verify"} exactv={true} element={<Verify/>} />
-           <Route path={"/forgotpassword"} exactv={true} element={<ForgotPassword/>} />
-           <Route path={"/checkout"} exactv={true} element={<Checkout/>} />
-           <Route path={"/my-account"} exactv={true} element={<MyAccount/>} />
-           <Route path={"/my-list"} exactv={true} element={<MyList/>} />
-           <Route path={"/my-orders"} exactv={true} element={<Orders/>} />
+           <Route path={"/cart"} exact={true} element={<Cart/>} />
+           <Route path={"/verify"} exact={true} element={<Verify/>} />
+           <Route path={"/forgotpassword"} exact={true} element={<ForgotPassword/>} />
+           <Route path={"/checkout"} exact={true} element={<Checkout/>} />
+           <Route path={"/my-account"} exact={true} element={<MyAccount/>} />
+           <Route path={"/my-list"} exact={true} element={<MyList/>} />
+           <Route path={"/my-orders"} exact={true} element={<Orders/>} />
        </Routes>
        <Footer />
        </MyContext.Provider>

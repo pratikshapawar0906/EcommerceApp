@@ -7,12 +7,16 @@ export const postData=async(url, formData)=>{
     const response=await fetch(apiUrl + url,{
         method:'POST',
         headers:{
-            'Authorization':`Bearer ${localStorage.getItem("token")}`,
             'Content-Type':'application/json'
         },
         body:JSON.stringify(formData)
     })
+        
+    return   await response.json();
+ 
   } catch (error) {
-    console.log(error)
+    console.error("API Error:", error);
+    return { success: false, message: "Server error" };
   }
 }
+

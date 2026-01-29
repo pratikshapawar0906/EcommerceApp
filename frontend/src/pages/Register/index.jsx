@@ -1,35 +1,63 @@
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io'
 import { Link } from 'react-router-dom'
+import { postData } from '../../utils/api'
+import { MyContext } from '../../App'
 
 const Register = () => {
    const [isShowPassword, setIsShowPassword]=useState(false);
-   const [formFileds, setFormFileds]=useState({
+   const [formFields, setFormFields]=useState({
      name:"",email:"",password:"",
    })
 
+   const Context=useContext(MyContext)
+
    const onChangeInput=(e)=>{
     const {name, value}= e.target;
-    setFormFileds(()=>{
+    setFormFields(()=>{
         return{
-            ...formFileds,
+            ...formFields,
             [name]:value
         }
     })
    }
 
    const handleSubmit=(e)=>{
-    
+    e.preventDefault();
+    if(formFields.name === ""){
+        Context.alertBox("error", "Please add full name")
+        return 
+    }
+    if(formFields.email === ""){
+        Context.alertBox("error", "Please add email")
+        return 
+    }
+    if(formFields.password === ""){
+        Context.alertBox("error", "Please add Password")
+        return 
+    }
+    postData("/api/user/register", formFields).then((res)=>{
+        console.log(res)
+    if(res?.success){
+       Context.alertBox( "success",  "Registration successful!" );
+    } else {
+       Context.alertBox( "error",  res?.message || "Something went wrong!" );
+    }
+    })
+    .catch((err) => {
+      Context.alertBox( "error","Server error!" );
+      console.error(err);
+    });
    }
 
   return (
     <>
 
     <section className="section py-10">
-            <div className="conatiner">
+            <div className="container">
                 <div className="card shadow-md w-[400px] m-auto rounded-md bg-[#ffffff]
                 p-4 px-10">
                 <h3 className=" text-center text-[#000] text-[18px]">Register with a new Account </h3>
@@ -44,7 +72,7 @@ const Register = () => {
 
                     <div className="form-group w-fill relative">
                          <TextField type={isShowPassword === false ? 'password' : 'text'} id="Password" name="password" label="Password" variant="outlined" className='w-full'  onChange={onChangeInput}/>
-                         <Button className='!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px]  !min-w-[35px]
+                         <Button type="button" className='!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px]  !min-w-[35px]
                          !rounded-full !text-[#000]' onClick={()=>{setIsShowPassword(!isShowPassword)}}>
                             {
                                isShowPassword === true  ? <IoMdEye className='text-[20px] opacity-75'/> : <IoMdEyeOff className='text-[20px] opacity-75'/>
@@ -55,7 +83,7 @@ const Register = () => {
                     
 
                     <div className="flex items-center  w-full mt-3 mb-3">
-                        <Button className='btn-org btn-lg w-full'>Register</Button>
+                        <Button type='submit' className='btn-org btn-lg w-full'>Register</Button>
                     </div>
 
                     <p className='text-center'>Alredy have an account? <Link to='/login' className='link text-[14px] font-[600] text-[#ff5252]'>Login</Link></p>

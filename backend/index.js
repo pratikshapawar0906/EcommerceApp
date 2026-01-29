@@ -15,19 +15,20 @@ import myListRouter from './Router/myListRoute.js'
 
 const app = express();
 const PORT = process.env.PORT || 7000;
+
 // Middleware
 app.use(cors(
-//     {
-//   origin: process.env.FRONTEND_URL,
-//   credentials: true
-// }
+    {
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}
 ));
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet({
-  crossOriginResourcePolicy: false
+  // crossOriginResourcePolicy: false
 }));
 
 connectDB();
