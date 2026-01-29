@@ -1,6 +1,6 @@
 import React from 'react'
 import Homeslider from '../../Component/Homeslider'
-import Catslider from '../../Component/catSlider'
+import Catslider from '../../Component/Catslider'
 import { TbTruckDelivery } from "react-icons/tb";
 import AdsBannerSlider from '../../Component/AdsBannerSlider';
 import Tabs from '@mui/material/Tabs';
