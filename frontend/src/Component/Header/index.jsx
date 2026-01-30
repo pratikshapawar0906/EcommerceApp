@@ -12,19 +12,16 @@ import Navigation from './Navigation';
 import { MyContext } from '../../App';
 import Button from '@mui/material/Button';
 import { FaRegUser} from "react-icons/fa";
-
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { IoBagHandleOutline } from 'react-icons/io5';
+import { fetchDataFromApi } from '../../utils/api';
 
 
 
-const Header = () => {
-  const Context=useContext(MyContext)
-
-   const StyledBadge = styled(Badge)(({ theme }) => ({
+ const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
       top: 13,
@@ -32,6 +29,10 @@ const Header = () => {
       padding: '0 4px',
     },
   }));
+
+const Header = () => {
+  const Context=useContext(MyContext)
+
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,6 +43,20 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logout=()=>{
+    setAnchorEl(null);
+
+    fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem(`token`)}`,{ withCredentials :true}).then((res)=>{
+      console.log(res);
+      Context.setIsLogin(false);
+       localStorage.removeItem("accesstoken")
+       localStorage.removeItem("refreshtoken")
+      Context.alertBox("success", "Logged out successfully");
+  }).catch ((error)=> {
+    Context.alertBox("error", "Logout failed");
+  }
+  )}
 
   return (
     <>
@@ -97,8 +112,9 @@ const Header = () => {
                   <Button className='!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-[#f1f1f1]'>
                     <FaRegUser className='text-[16px] text-[rgba(0,0,0,0.7)]'/></Button>
 
-                    <div className="info">
-                      <h4 className="text-[14px] font-[500]  text-[rgba(0,0,0,0.6)]capitalize text-left justify-start">abd tikas</h4>
+                    <div className="info flex flex-col">
+                      <h4 className="leading-3 text-[14px] font-[500]  text-[rgba(0,0,0,0.6)] capitalize text-left justify-start">{Context?.userData?.name}</h4>
+                      <span className="text-[13px] font-[500]  text-[rgba(0,0,0,0.6)] capitalize text-left justify-start">{Context?.userData?.email}</span>
                      
                     </div>
                  </div>
@@ -156,7 +172,7 @@ const Header = () => {
                     </MenuItem>
                      </Link>
                     
-                     <MenuItem onClick={handleClose} className='flex gap-2  !py-2'>
+                     <MenuItem onClick={logout} className='flex gap-2  !py-2'>
                       <FiLogOut className='text-[18px]' /> <span className="text-[14px]">Logout</span>
                     </MenuItem>
                    

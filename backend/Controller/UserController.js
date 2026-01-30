@@ -61,7 +61,7 @@ export const registerUser = async (req, res) => {
 
    
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       error:false,
       message: "User registered successfully! Please Verify your email.",

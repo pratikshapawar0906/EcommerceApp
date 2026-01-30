@@ -9,6 +9,7 @@ export const postData=async(url, formData)=>{
         headers:{
             'Content-Type':'application/json'
         },
+        credentials: "include",
         body:JSON.stringify(formData)
     })
         
@@ -18,5 +19,28 @@ export const postData=async(url, formData)=>{
     console.error("API Error:", error);
     return { success: false, message: "Server error" };
   }
+}
+
+export const fetchDataFromApi=async(url)=>{
+     try {
+      const token = localStorage.getItem("accesstoken");
+      
+        if (!token) {
+           console.log("No token found");
+           return;
+         }
+    
+      const {data} =await axios.get(apiUrl+url,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+      )
+      return data;
+     } catch (error) {
+       console.log(error)
+       return error
+     }
 }
 

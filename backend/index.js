@@ -19,9 +19,12 @@ const PORT = process.env.PORT || 7000;
 // Middleware
 app.use(cors(
     {
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}
+      origin: [
+        "http://localhost:5173",
+        "https://pawar-ecommerce-app.netlify.app/"
+      ],
+      credentials: true
+    }
 ));
 
 app.use(express.json());

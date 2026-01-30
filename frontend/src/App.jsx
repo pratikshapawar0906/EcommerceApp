@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import './App.css'
 import Header from './Component/Header'
 import Home from './pages/Home'
@@ -22,6 +22,7 @@ import Checkout from './pages/Checkout'
 import MyAccount from './pages/MyAccount'
 import MyList from './pages/Mylist'
 import Orders from './pages/Orders'
+import { fetchDataFromApi } from './utils/api'
 
 
 const MyContext = createContext();
@@ -31,7 +32,8 @@ const App = () => {
   const [maxWidth, setMaxWidth] = useState('lg');
   const [fullWidth, setFullWidth] = useState(true);
   const [openCartPanel, setOpenCartPanel] =useState(false);
-  const[isLogin, setIsLogin]=useState(true)
+  const[isLogin, setIsLogin]=useState(false)
+  const [userData,setUserData]=useState(null)
   const apiUrl=import.meta.env.VITE_API_URL
 
 
@@ -42,6 +44,16 @@ const App = () => {
   const toggleCartPanel = (newOpen) => () => {
     setOpenCartPanel(newOpen);
   };
+
+ useEffect(() => {
+  const token = localStorage.getItem("accesstoken");
+  setIsLogin(!!token);
+  fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
+    console.log(res)
+    setUserData(res.data);
+  })
+}, []);
+
 
   const alertBox=(type,msg)=>{
     if(type==="success"){
@@ -60,7 +72,9 @@ const App = () => {
     toggleCartPanel,
     isLogin,
     setIsLogin,
-    alertBox
+    alertBox,
+    userData,
+    setUserData
     
   }
   return (

@@ -3,17 +3,20 @@ import TextField from '@mui/material/TextField'
 import React, { useContext, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { postData } from '../../utils/api'
 import { MyContext } from '../../App'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const Register = () => {
+    const[isLoading,setIsLoading]=useState(false);
    const [isShowPassword, setIsShowPassword]=useState(false);
    const [formFields, setFormFields]=useState({
      name:"",email:"",password:"",
    })
 
    const Context=useContext(MyContext)
+   const history=useNavigate()
 
    const onChangeInput=(e)=>{
     const {name, value}= e.target;
@@ -25,32 +28,47 @@ const Register = () => {
     })
    }
 
+    const valideValue=Object.values(formFields).every(el=>el);
+
    const handleSubmit=(e)=>{
     e.preventDefault();
-    if(formFields.name === ""){
-        Context.alertBox("error", "Please add full name")
-        return 
-    }
-    if(formFields.email === ""){
-        Context.alertBox("error", "Please add email")
-        return 
-    }
-    if(formFields.password === ""){
-        Context.alertBox("error", "Please add Password")
-        return 
-    }
+    setIsLoading(true);
+      
+      if(formFields.name === ""){
+          Context.alertBox("error", "Please add full name")
+           return;
+      }
+      if(formFields.email === ""){
+          Context.alertBox("error", "Please add email")
+           return;
+      }
+      if(formFields.password === ""){
+          Context.alertBox("error", "Please add Password")
+          return;
+      }
+
     postData("/api/user/register", formFields).then((res)=>{
-        console.log(res)
-    if(res?.success){
-       Context.alertBox( "success",  "Registration successful!" );
+    console.log(res)
+    if(res?.success){    
+       Context.alertBox( "success",  res?.message || "Registration successful!" );
+       localStorage.setItem("userEmail",formFields.email)
+       setFormFields({
+            name:"",email:"",password:""  
+       })
+       setIsLoading(false); 
+       history('/verify')
+    
     } else {
        Context.alertBox( "error",  res?.message || "Something went wrong!" );
+       setIsLoading(false); 
     }
+        
     })
     .catch((err) => {
       Context.alertBox( "error","Server error!" );
       console.error(err);
     });
+    
    }
 
   return (
@@ -64,14 +82,17 @@ const Register = () => {
 
                 <form action="" className="w-full mt-5" onSubmit={handleSubmit}>
                   <div className="form-group w-fill mb-5">
-                         <TextField  type='text'  id="name" label="Full Name" name="name" variant="outlined" className='w-full' onChange={onChangeInput}/>
+                         <TextField  type='text'  id="name" label="Full Name" name="name" value={formFields.name} variant="outlined" className='w-full' onChange={onChangeInput}
+                         disabled={isLoading===true ? true:false}/>
                     </div>
                     <div className="form-group w-fill mb-5">
-                         <TextField  type='email'  id="email" label="Email Id" name="email" variant="outlined" className='w-full' onChange={onChangeInput}/>
+                         <TextField  type='email'  id="email" label="Email Id" name="email" variant="outlined"  value={formFields.email} className='w-full' onChange={onChangeInput}
+                         disabled={isLoading===true ? true:false}/>
                     </div>
 
                     <div className="form-group w-fill relative">
-                         <TextField type={isShowPassword === false ? 'password' : 'text'} id="Password" name="password" label="Password" variant="outlined" className='w-full'  onChange={onChangeInput}/>
+                         <TextField type={isShowPassword === false ? 'password' : 'text'} id="Password" name="password" value={formFields.password} label="Password" variant="outlined"
+                         disabled={isLoading===true ? true:false} className='w-full'  onChange={onChangeInput}/>
                          <Button type="button" className='!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px]  !min-w-[35px]
                          !rounded-full !text-[#000]' onClick={()=>{setIsShowPassword(!isShowPassword)}}>
                             {
@@ -83,7 +104,13 @@ const Register = () => {
                     
 
                     <div className="flex items-center  w-full mt-3 mb-3">
-                        <Button type='submit' className='btn-org btn-lg w-full'>Register</Button>
+                        <Button type='submit' disabled={!valideValue || isLoading} className='btn-org btn-lg w-full flex gap-3 '>
+                            {
+                                isLoading === true ?  <CircularProgress color="inherit" /> 
+                                :
+                                 'Register'
+                            }
+                          </Button>
                     </div>
 
                     <p className='text-center'>Alredy have an account? <Link to='/login' className='link text-[14px] font-[600] text-[#ff5252]'>Login</Link></p>
