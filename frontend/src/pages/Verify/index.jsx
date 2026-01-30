@@ -45,12 +45,13 @@ const Verify = () => {
         }else{
              postData("/api/user/verify-forgot-password",{
               email:localStorage.getItem("userEmail"),
+              otp: otp
             }).then((res)=>{
                 if(res?.success){
                    Context.alertBox( "success",  res?.message || "Verify OTP successfull!" );
                    setIsLoading(false)
                    localStorage.removeItem("userEmail")
-                   history('/reset-password')
+                   history('/forgotpassword')
                    
                 } else {
                    Context.alertBox( "error", res?.message || "Something went wrong!" );
