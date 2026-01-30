@@ -21,7 +21,7 @@ app.use(cors(
     {
       origin: [
         "http://localhost:5173",
-        "https://pawar-ecommerce-app.netlify.app/"
+        "https://pawar-ecommerce-app.netlify.app"
       ],
       credentials: true
     }
@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet({
-  // crossOriginResourcePolicy: false
+  crossOriginResourcePolicy: false
 }));
 
 connectDB();
