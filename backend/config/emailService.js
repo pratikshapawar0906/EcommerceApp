@@ -1,31 +1,22 @@
-import nodemailer from "nodemailer";
-import http from 'http'
+import dotenv from "dotenv";
+dotenv.config();
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async ({ sendTo, subject,text, html }) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false, // true for 465, false for 587
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+    const data = await resend.emails.send({
+      from: "Ecommerce App <onboarding@resend.dev>",
+      to: sendTo,
+      subject: subject,
+      html: html || `<p>${text}</p>`,
     });
 
-    const mailOptions = {
-      from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
-      to: sendTo,
-      subject,
-      html,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    return info;
+    return data;
   } catch (error) {
     console.error("Email send error:", error);
-     throw error;
-    // throw new Error("Email not sent");
+    throw error;
   }
 };
 
