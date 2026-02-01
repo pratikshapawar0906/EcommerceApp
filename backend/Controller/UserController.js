@@ -395,11 +395,18 @@ export const updateUserDetails = async (req, res) => {
 
     
 
-    return  res.status(500).json({
+    return  res.status(200).json({
         success: true,
         message: "User Updated Succesfully",
         error:false,
-        user:updateUser
+        user:{
+          name:updateUser?.name,
+          _id:updateUser?._id,
+          email:updateUser?.email,
+          mobile:updateUser?.mobile,
+          avatar:updateUser?.avatar,
+          
+        }
     });
 
   
@@ -535,7 +542,7 @@ export const verifyForgotPasswordOtpController = async (req, res) => {
 export const resetpasswordController =async(req,res)=>{
   try {
      
-    const {email, newPassword, confirmPassword}=req.body;
+    const {email,oldPassword, newPassword, confirmPassword}=req.body;
 
     if(!email || !newPassword || !confirmPassword){
       return res.status(400).json({
@@ -543,11 +550,20 @@ export const resetpasswordController =async(req,res)=>{
       })
     }
 
-    const user= await User.findOne({email:email});
+    const user= await User.findOne({email:email}).select('+password');
 
     if(!user){
       return res.status(400).json({
         message:" Email is not  available",
+        success:false,
+        error:true
+      })
+    }
+
+    const checkPassword=await bcrypt.compare(oldPassword,user.password);
+    if(!checkPassword){
+      return res.status(400).json({
+        message:" Your Old Password is wrong",
         success:false,
         error:true
       })
@@ -586,7 +602,7 @@ export const resetpasswordController =async(req,res)=>{
 export const refreshTokenController =async(req,res)=>{
   try {
      
-    const refreshToken= req.cookies?.refreshToken || req?.headers?.authorization?.split(" ")[1]
+    const refreshToken= req.cookies?.refreshtoken || req?.headers?.authorization?.split(" ")[1]
 
        if(!refreshToken){   
         return res.status(400).json({
@@ -596,7 +612,7 @@ export const refreshTokenController =async(req,res)=>{
         })
        }
 
-       const verifyToken =await jwt.verify(refreshToken,process.env.SECRET_KEY_ACCESS_TOKEN)
+       const verifyToken =await jwt.verify(refreshToken,process.env.SECRET_KEY_REFRESH_TOKEN)
          
         if(!verifyToken){
          return res.status(400).json({
@@ -607,7 +623,7 @@ export const refreshTokenController =async(req,res)=>{
         }
     
         const userId=verifyToken?._id;
-        const newAccessToken =await generatedRefreshToken(userId);
+        const newAccessToken =await generatedAccessToken(userId);
 
         const cookiesOption={
           httpOnly:true,

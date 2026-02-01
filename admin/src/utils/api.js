@@ -26,6 +26,7 @@ export const fetchDataFromApi = async (url) => {
     const token = localStorage.getItem("accesstoken");
 
     if (!token) {
+      console.log("No token found");
       return { success: false, message: "No token found" };
     }
 
@@ -33,7 +34,7 @@ export const fetchDataFromApi = async (url) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // withCredentials: true,
+      withCredentials: true,
     });
 
     // Axios wraps the response in `data`
@@ -43,43 +44,5 @@ export const fetchDataFromApi = async (url) => {
     return { success: false, message: "Server error" };
   }
 };
-
-export const uploadImage=async(url,updatedData)=>{
- 
-  const token = localStorage.getItem("accesstoken");
-
-  var response;
-  await axios.put( apiUrl + url ,updatedData,{
-        headers:{
-           Authorization: `Bearer ${token}`,
-           'Content-Type':'multipart/form-data'
-        },
-        credentials: "include",
-        
-    }).then((res)=>{ 
-       response=res;
-    });
-    return response;
- 
-}
-
-export const editData=async(url,updatedData)=>{
- 
-  const token = localStorage.getItem("accesstoken");
-
-  var response;
-  await axios.put( apiUrl + url ,updatedData,{
-        headers:{
-           Authorization: `Bearer ${token}`,
-           'Content-Type':'application/json'
-        },
-        credentials: "include",
-        
-    }).then((res)=>{ 
-       response=res;
-    });
-    return response;
- 
-}
 
 

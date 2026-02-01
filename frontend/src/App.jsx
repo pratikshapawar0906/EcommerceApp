@@ -48,9 +48,20 @@ const App = () => {
  useEffect(() => {
   const token = localStorage.getItem("accesstoken");
   setIsLogin(!!token);
+   if (!token) {
+    setIsLogin(false);
+    return;
+  }
   fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
-    console.log(res)
     setUserData(res.data);
+    if(res.response?.data.error===true){
+      if(res.response?.data.message==="You have not login"){
+        localStorage.setItem("accesstoken",res?.data?.accesstoken);
+        localStorage.setItem("refreshToken",res?.data?.refreshToken);
+        alertBox("error","Your session is Closed Please Login Again")
+        setIsLogin(false)
+      }
+    }
   })
 }, []);
 
@@ -85,17 +96,17 @@ const App = () => {
        <Header/>
        <Routes>
           <Route path={"/"}  element={<Home/>} />
-           <Route path={"/productListing"}  exact={true} element={<ProductListing/>} />
-           <Route path={"/productDetails/:id"} exact={true} element={<ProductDetails/>} />
-           <Route path={"/login"} exact={true} element={<Login/>} />
-           <Route path={"/register"} exact={true} element={<Register/>} />
-           <Route path={"/cart"} exact={true} element={<Cart/>} />
-           <Route path={"/verify"} exact={true} element={<Verify/>} />
-           <Route path={"/forgotpassword"} exact={true} element={<ForgotPassword/>} />
-           <Route path={"/checkout"} exact={true} element={<Checkout/>} />
-           <Route path={"/my-account"} exact={true} element={<MyAccount/>} />
-           <Route path={"/my-list"} exact={true} element={<MyList/>} />
-           <Route path={"/my-orders"} exact={true} element={<Orders/>} />
+           <Route path={"/productListing"}  element={<ProductListing/>} />
+           <Route path={"/productDetails/:id"}  element={<ProductDetails/>} />
+           <Route path={"/login"}  element={<Login/>} />
+           <Route path={"/register"}  element={<Register/>} />
+           <Route path={"/cart"}  element={<Cart/>} />
+           <Route path={"/verify"}  element={<Verify/>} />
+           <Route path={"/forgotpassword"}  element={<ForgotPassword/>} />
+           <Route path={"/checkout"}  element={<Checkout/>} />
+           <Route path={"/my-account"}  element={<MyAccount/>} />
+           <Route path={"/my-list"}  element={<MyList/>} />
+           <Route path={"/my-orders"} element={<Orders/>} />
        </Routes>
        <Footer />
        </MyContext.Provider>

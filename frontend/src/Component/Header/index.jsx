@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Search from '../search'
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
@@ -33,7 +33,7 @@ import { fetchDataFromApi } from '../../utils/api';
 const Header = () => {
   const Context=useContext(MyContext)
 
-
+  const history=useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -48,11 +48,11 @@ const Header = () => {
     setAnchorEl(null);
 
     fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem(`token`)}`,{ withCredentials :true}).then((res)=>{
-      console.log(res);
       Context.setIsLogin(false);
        localStorage.removeItem("accesstoken")
        localStorage.removeItem("refreshtoken")
       Context.alertBox("success", "Logged out successfully");
+      history('/')
   }).catch ((error)=> {
     Context.alertBox("error", "Logout failed");
   }
