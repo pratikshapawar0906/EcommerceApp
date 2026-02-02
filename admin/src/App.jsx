@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import {BrowserRouter as Router, Routes ,Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Dashboard from './Pages/Dashboard'
 import Header from './Component/Header'
@@ -26,7 +26,8 @@ import Orders from './Pages/Orders'
 import ForgotPassword from './Pages/ForgotPassword'
 import Verify from './Pages/Verify'
 import ChangePassword from './Pages/ChangePassword'
-
+import toast, {Toaster} from 'react-hot-toast'
+import { fetchDataFromApi } from './utils/api'
 
 
 
@@ -42,12 +43,21 @@ const Transition = forwardRef(function Transition(props, ref) {
 function App() {
   const [isSidebarOpen, setIsSidebarOpen]=useState(true);
   const [isLogin, setIsLogin]=useState(false);
+  const [userData,setUserData]=useState(null)
   const [isOpenFullScreenPanel, setIsOpenFullScreenPanel]=useState({
     open:false,
     model:''
   });
 
-  
+  const alertBox=(type,msg)=>{
+    if(type==="success"){
+      toast.success(msg)
+    }
+    if(type==="error"){
+      toast.error(msg)
+    }
+    
+  }
  
 
   const router= createBrowserRouter([
@@ -247,13 +257,36 @@ function App() {
     },
   ])
 
+   useEffect(() => {
+    const token = localStorage.getItem("accesstoken");
+    setIsLogin(!!token);
+     if (!token) {
+      setIsLogin(false);
+      return;
+    }
+    fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
+      setUserData(res.data);
+      if(res.response?.data.error===true){
+        if(res.response?.data.message==="You have not login"){
+          localStorage.setItem("accesstoken",res?.data?.accesstoken);
+          localStorage.setItem("refreshToken",res?.data?.refreshToken);
+          alertBox("error","Your session is Closed Please Login Again")
+          setIsLogin(false)
+        }
+      }
+    })
+  }, [isLogin]);
+
   const values={
     isSidebarOpen,
    setIsSidebarOpen,
    isLogin,
    setIsLogin,
    isOpenFullScreenPanel,
-   setIsOpenFullScreenPanel
+   setIsOpenFullScreenPanel,
+   alertBox,
+   userData,
+   setUserData
   }
 
   return (
@@ -261,6 +294,7 @@ function App() {
     <MyContext.Provider  value={values}>
       <RouterProvider router={router}/>
 
+   
       <Dialog
         fullScreen
         open={isOpenFullScreenPanel.open}
@@ -306,6 +340,7 @@ function App() {
           isOpenFullScreenPanel?.model ==='Add New Subcategory' && <AddSubCategoryList/>
         }
       </Dialog>
+        <Toaster/>
     </MyContext.Provider>
     </>
   )

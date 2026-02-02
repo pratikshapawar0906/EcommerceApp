@@ -19,7 +19,7 @@ const userSchema=new mongoose.Schema({
     password: {
       type: String,
       required: [true, "Provide password"],
-      select: false, // never return password
+      select: true, // never return password
     },
     avatar:{
       type: String,

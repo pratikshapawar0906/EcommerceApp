@@ -32,7 +32,7 @@ const Register = () => {
 
    const handleSubmit=(e)=>{
     e.preventDefault();
-    setIsLoading(true);
+    
       
       if(formFields.name === ""){
           Context.alertBox("error", "Please add full name")
@@ -47,10 +47,11 @@ const Register = () => {
           return;
       }
 
+      setIsLoading(true);
     postData("/api/user/register", formFields).then((res)=>{
     console.log(res)
     if(res?.success){    
-       Context.alertBox( "success",  res?.message || "Registration successful!" );
+       Context.alertBox( "success",  res?.message );
        localStorage.setItem("userEmail",formFields.email)
        setFormFields({
             name:"",email:"",password:""  
@@ -59,7 +60,7 @@ const Register = () => {
        history('/verify')
     
     } else {
-       Context.alertBox( "error",  res?.message || "Something went wrong!" );
+       Context.alertBox( "error",  res?.message );
        setIsLoading(false); 
     }
         

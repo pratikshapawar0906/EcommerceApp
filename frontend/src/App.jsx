@@ -63,7 +63,7 @@ const App = () => {
       }
     }
   })
-}, []);
+}, [isLogin]);
 
 
   const alertBox=(type,msg)=>{

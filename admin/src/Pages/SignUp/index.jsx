@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import { CgLogIn } from "react-icons/cg";
 import { FaRegEye, FaRegUser } from "react-icons/fa6";
@@ -7,11 +7,18 @@ import { FcGoogle } from "react-icons/fc";
 import { FaEyeSlash, FaFacebook } from "react-icons/fa";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { postData } from '../../utils/api';
+import CircularProgress from '@mui/material/CircularProgress';
+import { MyContext } from '../../App';
 
 const SignUp = () => {
     const [loadingGoogle, setLoadingGoogle] = useState(false);
     const [loadingFb, setLoadingFb] = useState(false);
     const [isPasswordShow, setIsPasswordShow] = useState(false);
+    const[isLoading,setIsLoading]=useState(false);
+    const [formFields, setFormFields]=useState({
+     name:"",email:"",password:"",
+   })
 
     function handleClickGoogle() {
       setLoadingGoogle(true);
@@ -20,6 +27,63 @@ const SignUp = () => {
     function handleClickFb() {
       setLoadingFb(true);
     }
+
+    const Context=useContext( MyContext )
+    const history=useNavigate()
+
+   const onChangeInput=(e)=>{
+    const {name, value}= e.target;
+    setFormFields(()=>{
+        return{
+            ...formFields,
+            [name]:value
+        }
+    })
+   }
+
+    const valideValue=Object.values(formFields).every(el=>el);
+
+   const handleSubmit=(e)=>{
+    e.preventDefault();
+   
+      
+      if(formFields.name === ""){
+          Context.alertBox("error", "Please add full name")
+           return;
+      }
+      if(formFields.email === ""){
+          Context.alertBox("error", "Please add email")
+           return;
+      }
+      if(formFields.password === ""){
+          Context.alertBox("error", "Please add Password")
+          return;
+      }
+
+       setIsLoading(true);
+
+    postData("/api/user/register", formFields).then((res)=>{
+    console.log(res)
+    if(res?.success){    
+       Context.alertBox( "success",  res?.message || "Registration successful!" );
+       localStorage.setItem("userEmail",formFields.email)
+       setFormFields({
+            name:"",email:"",password:""  
+       })
+       setIsLoading(false); 
+       history('/verify-account')
+    
+    } else {
+       Context.alertBox( "error",  res?.message || "Something went wrong!" );
+       setIsLoading(false); 
+    }
+        
+    })
+    .catch((err) => {
+      Context.alertBox( "error","Server error!" );
+      console.error(err);
+    });
+  }
   return (
     <>
        <section className=" bg-white w-full ">
@@ -28,12 +92,12 @@ const SignUp = () => {
 
 
             <div className="flex items-center gap-0">
-                <NavLink to='/login' exact={true} activeClassName='isActive' >
+                <NavLink to='/login' exact={true} className={({ isActive }) => isActive ? "isActive" : ""} >
                     <Button className='rounded-full !text-[rgba(0,0,0,0.8)] !px-5 flex gap-1'>
                         <CgLogIn className='text-[18px] '/>Login
                     </Button>
                 </NavLink>
-                <NavLink to='/sign-up' exact={true} activeClassName='isActive'>
+                <NavLink to='/sign-up' exact={true} className={({ isActive }) => isActive ? "isActive" : ""}>
                     <Button className='rounded-full !text-[rgba(0,0,0,0.8)] !px-5 flex gap-1'>
                         <FaRegUser className='text-[15px] '/>Sign up
                     </Button>
@@ -83,25 +147,25 @@ const SignUp = () => {
              </div>
 
              <br/>
-             <form action="" className="w-full px-8 mt-3">
+             <form action="" className="w-full px-8 mt-3 " onSubmit={handleSubmit}>
                 <div className="form-group mb-4 w-full">
                   <h4 className="text-[14px] font-[500] mb-1">Full Name</h4>
                   <input type='text' className='w-full h-[50px] border-2 border-[rgba(0,0,0,0.1)]
-                  rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3'/>
+                  rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3' name="name" value={formFields.name} onChange={onChangeInput}disabled={isLoading===true ? true:false}/>
                 </div>
                 <div className="form-group mb-4 w-full">
                   <h4 className="text-[14px] font-[500] mb-1">Email</h4>
                   <input type='email' className='w-full h-[50px] border-2 border-[rgba(0,0,0,0.1)]
-                  rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3'/>
+                  rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3'  name="email" value={formFields.email} onChange={onChangeInput}disabled={isLoading===true ? true:false}/>
                 </div>
 
                 <div className="form-group mb-4 w-full">
                   <h4 className="text-[14px] font-[500] mb-1">Password</h4>
                   <div className="relative w-full">
                      <input type={isPasswordShow===false ? 'password':'text'} className='w-full h-[50px] border-2 border-[rgba(0,0,0,0.1)]
-                     rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3'/>
+                     rounded-md focus:border-[rgba(0,0,0,0.7)] focus:outline-none px-3'  name="password" value={formFields.password} onChange={onChangeInput}disabled={isLoading===true ? true:false}/>
                      <Button className='!absolute top-[7px] right-[10px] z-50  !text-gray-600
-                       !rounded-full ! w-[35px] !h-[35px] !min-w-[35px]' onClick={()=>setIsPasswordShow(!isPasswordShow)}>
+                       !rounded-full ! w-[35px] !h-[35px] !min-w-[35px]' onClick={() => setIsPasswordShow(!isPasswordShow)}>
                         {
                           isPasswordShow === false ? ( 
                           <FaRegEye className='text-[18px]'/> 
@@ -119,7 +183,13 @@ const SignUp = () => {
                    <Link to='/forgot-password' className='text-[#3872fa] font-[700] text-[15px] hover:underline hover:text-gray-700'>Forgot Password?</Link>
                 </div>
 
-                <Button className="btn-blue btn-lg w-full">Sign up</Button>
+                <Button className="btn-blue btn-lg w-full" disabled={!valideValue || isLoading} type='submit'>
+                  {
+                      isLoading === true ?  <CircularProgress color="inherit" /> 
+                      :
+                       'Sign up'
+                  }
+                </Button>
              </form>
           </div>
       </section>

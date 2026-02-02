@@ -30,7 +30,7 @@ const OtpBox = ({ length = 6, onChange }) => {
       className="otpBox"
       style={{ display: "flex", gap: "8px", justifyContent: "center" }}
     >
-      {otp.map(( index) => (
+      {otp.map((digit, index) => (
         <input
           key={index}
           id={`otp-input-${index}`}

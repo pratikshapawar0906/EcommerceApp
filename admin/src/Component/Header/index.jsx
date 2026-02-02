@@ -11,6 +11,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { MyContext } from '../../App';
 import { RiMenuFold3Line, RiMenuFold4Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { fetchDataFromApi } from '../../utils/api';
 
 
 
@@ -35,6 +36,20 @@ const Header = () => {
     setAnchorMyAcc(null);  
   };
 
+
+    const logout=()=>{
+      setAnchorMyAcc(null);
+  
+      fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem(`token`)}`,{ withCredentials :true}).then((res)=>{
+        Context.setIsLogin(false);
+         localStorage.removeItem("accesstoken")
+         localStorage.removeItem("refreshtoken")
+        Context.alertBox("success", "Logged out successfully");
+        history('/')
+    }).catch ((error)=> {
+      Context.alertBox("error", "Logout failed");
+    }
+    )}
   
   return (
     <>
@@ -60,7 +75,7 @@ const Header = () => {
                   Context.isLogin === true ? 
                    <div className="relative">
                   <div className="rounded-full w-[35px] h-[35px] overflow-hidden cursor-pointer"
-                  onClick={()=>handleClickMyAcc}>
+                  onClick={handleClickMyAcc}>
                     <img src="./thumb-1.jpg" className='w-full h-full object-cover '/>
                  </div>
                  
@@ -110,8 +125,8 @@ const Header = () => {
 
 
                           <div className="info ">
-                            <h3 className='text-[15px] font-[500] leading-5'>Angelina Gotelli</h3>
-                            <p className="text-[12px] font-[400] opacity-70">admin-01@ecme.com</p>
+                            <h3 className='text-[15px] font-[500] leading-5'>{Context?.userData?.name}</h3>
+                            <p className="text-[12px] font-[400] opacity-70">{Context?.userData?.email}</p>
                           </div>
                        </div>
                      </MenuItem>
@@ -120,7 +135,7 @@ const Header = () => {
                       < FaRegUser className='text-[16px]'/> <span className="text-[14px] ">Profile </span> 
                      </MenuItem>
                     
-                     <MenuItem onClick={handleCloseMyAcc} className='flex items-center gap-3'>
+                     <MenuItem  onClick={logout} className='flex items-center gap-3'>
                       <MdOutlineLogout className='text-[16px]' /> <span className="text-[14px] ">Sign-out</span> 
                      </MenuItem>
                    </Menu>
