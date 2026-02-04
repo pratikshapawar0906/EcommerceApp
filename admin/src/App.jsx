@@ -28,6 +28,8 @@ import Verify from './Pages/Verify'
 import ChangePassword from './Pages/ChangePassword'
 import toast, {Toaster} from 'react-hot-toast'
 import { fetchDataFromApi } from './utils/api'
+import Profile from './Pages/Profile'
+import Address from './Pages/Address/AddAddress'
 
 
 
@@ -44,6 +46,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen]=useState(true);
   const [isLogin, setIsLogin]=useState(false);
   const [userData,setUserData]=useState(null)
+  const[address ,setAddress]=useState([])
   const [isOpenFullScreenPanel, setIsOpenFullScreenPanel]=useState({
     open:false,
     model:''
@@ -208,6 +211,26 @@ function App() {
         </>
       )
     },
+     {
+      path:"/profile",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <Profile/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
     {
       path:"/orders",
       exact:true,
@@ -255,6 +278,7 @@ function App() {
         </>
       )
     },
+    
   ])
 
    useEffect(() => {
@@ -264,18 +288,19 @@ function App() {
       setIsLogin(false);
       return;
     }
-    fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
+    // if(token== !null && token !== "" && token !== undefined)
+    setIsLogin(true);
+    fetchDataFromApi(`/api/user/userDetails?token=${token}`)
+    .then(res => {
       setUserData(res.data);
-      if(res.response?.data.error===true){
-        if(res.response?.data.message==="You have not login"){
-          localStorage.setItem("accesstoken",res?.data?.accesstoken);
-          localStorage.setItem("refreshToken",res?.data?.refreshToken);
-          alertBox("error","Your session is Closed Please Login Again")
-          setIsLogin(false)
-        }
+      if (res.response?.data.error && res.response?.data.message === "You have not login") {
+        localStorage.removeItem("accesstoken");
+        localStorage.removeItem("refreshtoken");
+        alertBox("error", "Your session is closed. Please login again.");
+        window.location.href = "/login";
       }
-    })
-  }, [isLogin]);
+    });
+  }, []);
 
   const values={
     isSidebarOpen,
@@ -286,7 +311,10 @@ function App() {
    setIsOpenFullScreenPanel,
    alertBox,
    userData,
-   setUserData
+   setUserData,
+   setAddress,
+   address
+   
   }
 
   return (
@@ -338,6 +366,9 @@ function App() {
         }
         {
           isOpenFullScreenPanel?.model ==='Add New Subcategory' && <AddSubCategoryList/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Add New Address' && <Address/>
         }
       </Dialog>
         <Toaster/>

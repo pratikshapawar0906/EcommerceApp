@@ -33,7 +33,11 @@ const addressSchema = new mongoose.Schema(
       sparse: true,
       default:null
     },
-     status: {
+    status: {
+      type: Boolean,   
+      default: true,
+    },
+    selected: {
       type: Boolean,   
       default: true,
     },

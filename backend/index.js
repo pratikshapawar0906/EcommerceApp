@@ -11,6 +11,7 @@ import catRouter from './Router/catRoute.js'
 import productRouter from './Router/productRoute.js'
 import cartProductRouter from './Router/cartProductRoute.js'
 import myListRouter from './Router/myListRoute.js'
+import addressRouter from './Router/addressRoute.js'
 
 
 const app = express();
@@ -18,8 +19,8 @@ const PORT = process.env.PORT || 7000;
 // Middleware
 app.use(cors( {
    origin: [ 
-    // "http://localhost:5173", 
-    "https://pawar-ecommerce-app.netlify.app" 
+    "http://localhost:5173", 
+    // "https://pawar-ecommerce-app.netlify.app" 
   ], credentials: true } ));
 
 
@@ -43,6 +44,7 @@ app.use('/api/category',catRouter)
 app.use('/api/product',productRouter)
 app.use('/api/cartProduct',cartProductRouter)
 app.use('/api/myList',myListRouter)
+app.use('/api/address',addressRouter)
 
 app.listen(PORT, () => {
   console.log(` Server running on  ${PORT}`);

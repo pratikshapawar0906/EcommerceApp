@@ -23,6 +23,7 @@ import MyAccount from './pages/MyAccount'
 import MyList from './pages/Mylist'
 import Orders from './pages/Orders'
 import { fetchDataFromApi } from './utils/api'
+import AddAddress from './pages/MyAccount/AddAddress'
 
 
 const MyContext = createContext();
@@ -34,7 +35,7 @@ const App = () => {
   const [openCartPanel, setOpenCartPanel] =useState(false);
   const[isLogin, setIsLogin]=useState(false)
   const [userData,setUserData]=useState(null)
-  const apiUrl=import.meta.env.VITE_API_URL
+  const[address ,setAddress]=useState([])
 
 
   const handleCloseProductDetailsModel = () => {
@@ -52,17 +53,25 @@ const App = () => {
     setIsLogin(false);
     return;
   }
-  fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
-    setUserData(res.data);
-    if(res.response?.data.error===true){
-      if(res.response?.data.message==="You have not login"){
-        localStorage.setItem("accesstoken",res?.data?.accesstoken);
-        localStorage.setItem("refreshToken",res?.data?.refreshToken);
-        alertBox("error","Your session is Closed Please Login Again")
-        setIsLogin(false)
+ 
+  if(token !== undefined && token !== null && token !== ""){
+    setIsLogin(true);
+    fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
+      setUserData(res.data);
+      if(res.response?.data.error===true){
+        if(res.response?.data.message==="You have not login"){
+          localStorage.setItem("accesstoken",res?.data?.accesstoken);
+          localStorage.setItem("refreshtoken",res?.data?.refreshtoken);
+          alertBox("error","Your session is Closed Please Login Again")
+         
+          window.location.href="/login"
+        }
       }
-    }
-  })
+    })
+  }else{
+    setIsLogin(false)
+  }
+
 }, [isLogin]);
 
 
@@ -85,7 +94,8 @@ const App = () => {
     setIsLogin,
     alertBox,
     userData,
-    setUserData
+    setUserData,
+    setAddress
     
   }
   return (
@@ -107,6 +117,7 @@ const App = () => {
            <Route path={"/my-account"}  element={<MyAccount/>} />
            <Route path={"/my-list"}  element={<MyList/>} />
            <Route path={"/my-orders"} element={<Orders/>} />
+           <Route path={"/address"} element={<AddAddress/>} />
        </Routes>
        <Footer />
        </MyContext.Provider>

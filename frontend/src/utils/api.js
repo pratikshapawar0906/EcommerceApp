@@ -4,10 +4,12 @@ const apiUrl=import.meta.env.VITE_API_URL;
 
 export const postData=async(url, formData)=>{
   try {
+    const token = localStorage.getItem("accesstoken");
     const response=await fetch(apiUrl + url,{
         method:'POST',
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            Authorization: `Bearer ${token}`,
         },
         credentials: "include",
         body:JSON.stringify(formData)
@@ -82,4 +84,21 @@ export const editData=async(url,updatedData)=>{
  
 }
 
+
+export const deleteData=async(url)=>{
+ 
+  const token = localStorage.getItem("accesstoken");
+
+
+  const response=await axios.delete( apiUrl + url ,{
+        headers:{
+           Authorization: `Bearer ${token}`,
+           'Content-Type':'application/json'
+        },
+        credentials: "include",
+        
+    })
+     return response
+ 
+}
 

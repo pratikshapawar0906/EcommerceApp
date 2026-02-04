@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { editData, postData } from '../../utils/api';
 import { Collapse } from 'react-collapse';
+import {PhoneInput} from 'react-international-phone';
+import 'react-international-phone/style.css'
 
 const MyAccount = () => {
 
@@ -15,6 +17,8 @@ const MyAccount = () => {
   const Context=useContext(MyContext);
   const history = useNavigate();
   const[userId,setUserId]=useState("")
+  const [phone,setPhone]=useState('')
+  const[address ,setAddress]=useState([])
   const[formFields, setFormFields]=useState({name:'',  mobile:'',email:''})
   const[changePassword, setChangePassword]=useState({email:'',oldPassword:'',  newPassword:'',confirmPassword:''})
   const[isChangePasswordFormShow, setIsChangePasswordFormShow]=useState(false)
@@ -34,6 +38,9 @@ const MyAccount = () => {
           email:Context?.userData?.email,
           mobile:Context?.userData?.mobile
          })
+
+          const ph=`"${Context?.userData?.mobile}"`
+          setPhone(ph);
 
           setChangePassword(prev => ({
             ...prev,
@@ -84,7 +91,7 @@ const MyAccount = () => {
           setIsLoading(false)
 
           localStorage.setItem("accesstoken",res?.data?.accesstoken);
-          localStorage.setItem("refreshToken",res?.data?.refreshToken);
+          localStorage.setItem("refreshtoken",res?.data?.refreshtoken);
           
           Context.setIsLogin(true)
        } else {
@@ -124,7 +131,7 @@ const MyAccount = () => {
           setIsLoading2(false)
 
           localStorage.setItem("accesstoken",res?.data?.accesstoken);
-          localStorage.setItem("refreshToken",res?.data?.refreshToken);
+          localStorage.setItem("refreshtoken",res?.data?.refreshtoken);
           
           Context.setIsLogin(true)
        } else {
@@ -170,8 +177,14 @@ const MyAccount = () => {
 
                       <div className="flex items-center mt-4 gap-5">
                          <div className="w-[100%]">
-                              <TextField id="outlined-basic" label="Phone number" value={formFields.mobile} variant="outlined" type='number'
-                              className='w-full'  name='mobile' onChange={onChangeInput} disabled={isLoading===true ? true:false} />
+                          <PhoneInput defaultCountry="in" value={phone} disabled={isLoading===true ? true:false}  onChange={((phone)=>{
+                                          setPhone(phone);
+                                          setFormFields((prev) => ({
+                                            ...prev,
+                                            mobile: phone,
+                                          }))
+                                        })}/>
+                              
                         </div>
                       </div>
 
@@ -188,6 +201,8 @@ const MyAccount = () => {
                       </div>
                    </form>
                 </div>
+
+                
                
                   <Collapse isOpened={isChangePasswordFormShow}>
                   <div className="card bg-white p-5 shadow-md  rounded-md">

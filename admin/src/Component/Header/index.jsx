@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import { MdOutlineLogout } from "react-icons/md";
 import { MyContext } from '../../App';
 import { RiMenuFold3Line, RiMenuFold4Line } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, Links } from 'react-router-dom';
 import { fetchDataFromApi } from '../../utils/api';
 
 
@@ -120,7 +120,7 @@ const Header = () => {
                      <MenuItem onClick={handleCloseMyAcc} className='!bg-white'>
                        <div className="flex items-center gap-3">
                           <div className="rounded-full w-[35px] h-[35px] overflow-hidden cursor-pointer">
-                             <img src="" className='w-full h-full object-cover '/>
+                             <img src="./thumb-1.jpg" className='w-full h-full object-cover '/>
                           </div>
 
 
@@ -131,9 +131,11 @@ const Header = () => {
                        </div>
                      </MenuItem>
                      <Divider/>
+                     <Link to='/profile'>
                      <MenuItem onClick={handleCloseMyAcc} className='flex items-center gap-3'>
                       < FaRegUser className='text-[16px]'/> <span className="text-[14px] ">Profile </span> 
                      </MenuItem>
+                     </Link>
                     
                      <MenuItem  onClick={logout} className='flex items-center gap-3'>
                       <MdOutlineLogout className='text-[16px]' /> <span className="text-[14px] ">Sign-out</span> 

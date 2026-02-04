@@ -10,6 +10,7 @@ import { MyContext } from '../../App';
 import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import {  uploadImage } from '../../utils/api';
+import { LuMapPin } from "react-icons/lu";
 
 const AccountSidebar = () => {
     const Context=useContext(MyContext);
@@ -24,9 +25,7 @@ const AccountSidebar = () => {
            setPreview(userAvatar);
         }
     },[Context?.userData])
-    
-    // let img_arr=[];
-    // let uniqueArray=[];
+
     let selectedImages=[];
 
     const onChangeFile=async(e)=>{
@@ -108,7 +107,16 @@ const AccountSidebar = () => {
 
                                 <Button className='flex items-center !px-5 !text-left 2 !justify-start gap-2 w-full !rounded-none !text-[rgba(0,0,0,0.8)]
                                 !capitalize'>
-                                  <FaRegUser className='text-[15px]'/>User Profile</Button>
+                                  <FaRegUser className='text-[15px]'/>My Profile</Button>
+                            </NavLink>
+                        </li>
+
+                        <li className='w-full'>
+                            <NavLink to="/address"  className={({ isActive }) => isActive ? "active" : ""}>
+
+                                <Button className='flex items-center !px-5 !text-left 2 !justify-start gap-2 w-full !rounded-none !text-[rgba(0,0,0,0.8)]
+                                !capitalize'>
+                                  <LuMapPin className='text-[18px]'/>Address</Button>
                             </NavLink>
                         </li>
 
@@ -130,7 +138,7 @@ const AccountSidebar = () => {
 
 
                         <li className='w-full'>
-                            <NavLink to="/logout" className={({ isActive }) => isActive ? "active" : ""}>
+                            <NavLink to="#" className={({ isActive }) => isActive ? "active" : ""}>
                                 <Button className='flex items-center !px-5 !text-left !py-2 !justify-start gap-2 w-full !rounded-none !text-[rgba(0,0,0,0.8)]
                                 !capitalize'>
                                   <FiLogOut className='text-[18px]'/>Logout</Button>
