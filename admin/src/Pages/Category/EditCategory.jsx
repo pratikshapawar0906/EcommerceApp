@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { editData, fetchDataFromApi } from '../../utils/api';
 import { IoMdClose, IoMdCloudUpload } from 'react-icons/io'
 import UploadBox from '../../Component/UploadBox'
 import Button from '@mui/material/Button'
@@ -7,8 +8,8 @@ import { deleteData, postData } from '../../utils/api'
 import { MyContext } from '../../App'
 import CircularProgress from '@mui/material/CircularProgress'
 
-const AddCategory = () => {
-   const [preview,setPreview]=useState([])
+const EditCategory = () => {
+    const [preview,setPreview]=useState([])
    const[isLoading,setIsLoading]=useState(false);
    const Context=useContext(MyContext)
 
@@ -17,6 +18,15 @@ const AddCategory = () => {
     //  parentCatName:"",  
     //  parentId: ""
   })
+  const id=Context?.isOpenFullScreenPanel?.id;
+
+  useEffect(()=>{
+    fetchDataFromApi(`/api/category/${id}`).then((res)=>{
+        console.log(res?.category)
+           formField.name=res?.category?.name
+           setPreview(res?.category?.images)
+      })
+  },[Context?.isOpenFullScreenPanel])
 
   const onChangeInput=(e)=>{
    const {name, value}=e.target
@@ -69,9 +79,9 @@ const AddCategory = () => {
               return  false
           }
 
-          postData('/api/category/createCat',formField).then((res)=>{
+          editData(`/api/category/updatecategory/${id}`,formField).then((res)=>{
             if(res?.success){
-               Context.alertBox( "success",  res?.message || "Created category  successful!" );
+               Context.alertBox("success",  res?.message || "Created category  successful!" );
                setTimeout(()=>{
                 setIsLoading(false)
                     Context.setIsOpenFullScreenPanel({
@@ -80,14 +90,14 @@ const AddCategory = () => {
                },1500)
               
             } else {
-               Context.alertBox( "error", res?.message || "Something went wrong!" );
+               Context.alertBox("error", res?.message || "Something went wrong!" );
                 setIsLoading(false)
             }
           })
     }
   return (
     <>
-      <section className="bg-gray-50 p-5">
+       <section className="bg-gray-50 p-5">
         <form action="" className="form p-8 py-3"  onSubmit={handleSubmit}>
           
             <div className="scroll max-h-[700px] overflow-y-scroll pr-4 pt-4">
@@ -108,7 +118,7 @@ const AddCategory = () => {
                           preview?.length  !==0 && preview?.map((image,index)=>
                             (
                                 
-                                 <div className="uploadBoxWrapper relative" key={index}>
+                                 <div className="uploadBoxWrapper relative" key={image}>
                                      <span className="absolute -top-[7px] -right-[7px] flex items-center justify-center w-[20px] h-[20px]
                                       rounded-full overflow-hidden bg-red-700 z-50 cursor-pointer " onClick={()=>removeImage(image,index)}>
                                          <IoMdClose className='text-white text-[10px]' />
@@ -151,4 +161,4 @@ const AddCategory = () => {
   )
 }
 
-export default AddCategory
+export default EditCategory

@@ -84,11 +84,11 @@ const Login = () => {
             setIsLoading(true);
             if(formFields.email === "" ){
                Context.alertBox("error", "Please add Email ");
-                return 
+                return  false
             }
             if(formFields.password === ""){
             Context.alertBox("error", "Please add Password")
-            return 
+            return false
         }
         postData("/api/user/login", formFields,{ withCredentials :true}).then((res)=>{
             if(res?.success){

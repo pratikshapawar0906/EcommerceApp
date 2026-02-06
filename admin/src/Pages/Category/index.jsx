@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
@@ -11,8 +11,11 @@ import TableBody from '@mui/material/TableBody'
 import Checkbox from '@mui/material/Checkbox';
 import { FiEdit3 } from 'react-icons/fi'
 import { FaRegEye, FaTrash } from 'react-icons/fa6'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 import { Link } from 'react-router-dom';
 import { MyContext } from '../../App'
+import { deleteData, fetchDataFromApi } from '../../utils/api'
 
 const columns = [
  
@@ -26,7 +29,13 @@ const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
 const Category = () => {
     const [categoryFilter, setCategoryFilter] = useState('');
         const Context=useContext(MyContext)
+        const[catData,setCatdata]=useState([]);
     
+        useEffect(()=>{
+           fetchDataFromApi("/api/category").then((res)=>{
+             setCatdata(res?.data)
+           })
+        },[Context?.isOpenFullScreenPanel])
         const handleChangeCatFilter = (event) => {
           setCategoryFilter(event.target.value);
         };
@@ -43,6 +52,14 @@ const Category = () => {
           setRowsPerPage(+event.target.value);
           setPage(0);
         };
+        
+        const deleteCategory=(id)=>{
+             deleteData(`/api/category/deleteCategory/${id}`).then((res)=>{
+                 fetchDataFromApi("/api/category").then((res)=>{
+                   setCatdata(res?.data)
+                 })
+             })
+        }
   return (
     <>
        <div className="flex items-center justify-between px-2 py-0 mt-3">
@@ -83,7 +100,55 @@ const Category = () => {
             </TableRow>
            </TableHead>
            <TableBody>
-            <TableRow>
+            {
+              catData?.length !==0 &&  catData?.map((item)=>{
+                return(
+                   <TableRow>
+                <TableCell >
+                    <Checkbox {...label}  size='small'/>
+                     
+                </TableCell>
+                <TableCell width={100}>
+                    <div className="flex items-center gap-4 w-[80px] ">
+                                           
+                        <div className="img w-full rounded-md overflow-hidden group">
+                            <Link to='/product/4567'>
+                              <LazyLoadImage  src={item.images[0]} alt='image'  effect='blur' className='w-full group-hover:scale-105 transition-all'/>
+                            </Link>
+                        </div>
+                       
+                    </div>
+                </TableCell>
+                  <TableCell width={100}>
+                      {item?.name}
+                  </TableCell>
+
+                <TableCell width={100}>
+                    <div className="flex items-center gap-1">
+                        <TooltipMUI title="Edit Product" placement="top">
+                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                            onClick={()=>Context.setIsOpenFullScreenPanel({
+                                open:true,
+                                model:'Edit Category',
+                                id:item?._id
+                            })}>
+                                 <FiEdit3 className='text-[rgba(0,0,0,0.7)] text-[20px] '/>
+                            </Button>
+                        </TooltipMUI>
+    
+                        <TooltipMUI title="Remove Product" placement="top">
+                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                            onClick={()=>deleteCategory(item?._id)}>
+                                 <FaTrash className='text-[rgba(0,0,0,0.7)] text-[16px] '/>
+                            </Button>
+                        </TooltipMUI>
+                    </div>
+                </TableCell>
+            </TableRow>
+                )
+              })
+            }
+            {/* <TableRow>
                 <TableCell >
                     <Checkbox {...label}  size='small'/>
                      
@@ -122,7 +187,7 @@ const Category = () => {
                         </TooltipMUI>
                     </div>
                 </TableCell>
-            </TableRow>
+            </TableRow> */}
 
            
           

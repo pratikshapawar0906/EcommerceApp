@@ -12,7 +12,7 @@ router.post('/register', registerUser );
 router.post('/verifyEmail', verifyEmailController );
 router.post('/login', loginUser );
 router.get('/logout',auth, logoutUser );
-router.put('/user-avatar',auth,upload.array('avatar') ,userAvatarController)
+router.post('/user-avatar',auth,upload.array('avatar') ,userAvatarController)
 router.delete('/deleteImage',auth,removeImageFromCloudinary)
 router.put('/:id',auth,updateUserDetails)
 router.post('/forgot-password',forgotPasswordController)

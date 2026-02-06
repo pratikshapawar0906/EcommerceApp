@@ -49,6 +49,27 @@ const categories = [
 ]
 
 const Catslider = () => {
+
+  // const id=Context?.isOpenFullScreenPanel?.id;
+
+  // useEffect(()=>{
+  //   fetchDataFromApi(`/api/category/${id}`).then((res)=>{
+  //       console.log(res?.category)
+  //          formField.name=res?.category?.name
+  //          setPreview(res?.category?.images)
+  //     })
+  // },[])
+
+  // const onChangeInput=(e)=>{
+  //  const {name, value}=e.target
+  //   setfromField(()=>{
+  //     return{
+  //      ...formField,
+  //      [name]: value
+  //     }
+  //   })
+  // }
+
   return (
     <div className="homeCatslider py-8 pt-4">
       <div className="container">

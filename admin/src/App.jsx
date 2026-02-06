@@ -30,6 +30,7 @@ import toast, {Toaster} from 'react-hot-toast'
 import { fetchDataFromApi } from './utils/api'
 import Profile from './Pages/Profile'
 import Address from './Pages/Address/AddAddress'
+import EditCategory from './Pages/Category/EditCategory'
 
 
 
@@ -49,7 +50,8 @@ function App() {
   const[address ,setAddress]=useState([])
   const [isOpenFullScreenPanel, setIsOpenFullScreenPanel]=useState({
     open:false,
-    model:''
+    model:'',
+    id:""
   });
 
   const alertBox=(type,msg)=>{
@@ -369,6 +371,9 @@ function App() {
         }
         {
           isOpenFullScreenPanel?.model ==='Add New Address' && <Address/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Edit Category' && <EditCategory/>
         }
       </Dialog>
         <Toaster/>

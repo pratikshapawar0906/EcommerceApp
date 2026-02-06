@@ -52,7 +52,7 @@ export const uploadImage=async(url,updatedData)=>{
   const token = localStorage.getItem("accesstoken");
 
   var response;
-  await axios.put( apiUrl + url ,updatedData,{
+  await axios.post( apiUrl + url ,updatedData,{
         headers:{
            Authorization: `Bearer ${token}`,
            'Content-Type':'multipart/form-data'
@@ -84,4 +84,20 @@ export const editData=async(url,updatedData)=>{
     return response;
  
 }
+
+export const deleteData=async(url)=>{
+ 
+  const token = localStorage.getItem("accesstoken");
+  const response=await axios.delete( apiUrl + url ,{
+        headers:{
+           Authorization: `Bearer ${token}`,
+           'Content-Type':'application/json'
+        },
+        credentials: "include",
+        
+    })
+    return response;
+ 
+}
+
 

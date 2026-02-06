@@ -237,7 +237,9 @@ export const getSingleCategoryController = async (req, res) => {
 }
 
 export const removeImageFromCloudinary = async (req, res) => {
-  const imgUrl=req.query.img;
+  try {
+    
+    const imgUrl=req.query.img;
 
   const urlArr=imgUrl.split("/"); 
   const image =urlArr[urlArr.length -1];
@@ -247,8 +249,24 @@ export const removeImageFromCloudinary = async (req, res) => {
     imageName,
     
   )
-  
-   return  res.status(200).send(result)
+
+
+    return res.status(200).json({
+         success: true,
+         error:false,
+         message: "Remove Image  Successfully",
+         Image:result
+         
+    });
+   
+   
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || error,
+      error:true,
+    });
+  }
   
 }
 

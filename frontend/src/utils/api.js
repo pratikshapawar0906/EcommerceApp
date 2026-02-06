@@ -51,7 +51,7 @@ export const uploadImage=async(url,updatedData)=>{
   const token = localStorage.getItem("accesstoken");
 
   var response;
-  await axios.put( apiUrl + url ,updatedData,{
+  await axios.post( apiUrl + url ,updatedData,{
         headers:{
            Authorization: `Bearer ${token}`,
            'Content-Type':'multipart/form-data'
