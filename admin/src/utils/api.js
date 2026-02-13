@@ -23,6 +23,19 @@ export const postData=async(url, formData)=>{
   }
 }
 
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("refreshtoken");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
+
 export const fetchDataFromApi = async (url) => {
   try {
     const token = localStorage.getItem("accesstoken");
@@ -67,22 +80,25 @@ export const uploadImage=async(url,updatedData)=>{
 }
 
 export const editData=async(url,updatedData)=>{
- 
-  const token = localStorage.getItem("accesstoken");
+  try {
+      const token = localStorage.getItem("accesstoken");
+  
+  const response=await axios.put( apiUrl + url ,updatedData,{
+   headers:{
+      Authorization: `Bearer ${token}`,
+      'Content-Type':'application/json'
+   },
+   credentials: "include",
+  });
 
-  var response;
-  await axios.put( apiUrl + url ,updatedData,{
-        headers:{
-           Authorization: `Bearer ${token}`,
-           'Content-Type':'application/json'
-        },
-        credentials: "include",
-        
-    }).then((res)=>{ 
-       response=res;
-    });
-    return response;
- 
+  // Axios wraps the response in `data`
+  return response.data;
+  }catch (error) {
+    console.error("API Error:", error);
+    throw error;
+    return { success: false, message: "Server error" };
+  }
+       
 }
 
 export const deleteData=async(url)=>{
@@ -98,6 +114,30 @@ export const deleteData=async(url)=>{
     })
     return response;
  
+}
+
+export const deleteMultipleData=async(url,body)=>{
+  try {
+      const token = localStorage.getItem("accesstoken");
+  
+  const response=await axios.delete( apiUrl + url ,{
+   headers:{
+      Authorization: `Bearer ${token}`,
+      'Content-Type':'application/json'
+   },
+     data: body,
+    
+   credentials: "include",
+  });
+
+  // Axios wraps the response in `data`
+  return response.data;
+  }catch (error) {
+    console.error("API Error:", error);
+    throw error;
+    
+  }
+       
 }
 
 

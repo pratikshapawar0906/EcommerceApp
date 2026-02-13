@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import { MdOutlineLogout } from "react-icons/md";
 import { MyContext } from '../../App';
 import { RiMenuFold3Line, RiMenuFold4Line } from 'react-icons/ri';
-import { Link, Links } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { fetchDataFromApi } from '../../utils/api';
 
 
@@ -37,19 +37,16 @@ const Header = () => {
   };
 
 
-    const logout=()=>{
-      setAnchorMyAcc(null);
+  const logout = () => {
+    setAnchorMyAcc(null);
   
-      fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem(`token`)}`,{ withCredentials :true}).then((res)=>{
-        Context.setIsLogin(false);
-         localStorage.removeItem("accesstoken")
-         localStorage.removeItem("refreshtoken")
-        Context.alertBox("success", "Logged out successfully");
-        history('/')
-    }).catch ((error)=> {
-      Context.alertBox("error", "Logout failed");
-    }
-    )}
+    fetchDataFromApi(`/api/user/logout`)
+      .finally(() => {
+        Context.forceLogout("Logged out successfully");
+      });
+  };
+
+
   
   return (
     <>

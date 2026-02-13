@@ -35,13 +35,9 @@ export const fetchDataFromApi = async (url) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // withCredentials: true,
     });
-
-    // Axios wraps the response in `data`
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
     return { success: false, message: "Server error" };
   }
 };

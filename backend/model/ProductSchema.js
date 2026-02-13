@@ -70,6 +70,11 @@ const ProductSchema= new mongoose.Schema({
     type:Boolean,
     default:false
   },
+  sale:{
+    type:Number,
+    default:0
+   
+  },
   discount:{
     type:Number,
     required:true,

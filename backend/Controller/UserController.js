@@ -644,7 +644,15 @@ export const usertDetailsController =async(req,res)=>{
 
     const userId=req.userId;
 
-    const user= await User.findById(userId).select("-password, -refreshToken");
+    if (!req.userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+        success: false,
+        error: true
+      });
+    }
+
+    const user= await User.findById(userId).select("-password -refreshToken");
 
       return res.status(200).json({
           message: " User Details",
@@ -654,6 +662,7 @@ export const usertDetailsController =async(req,res)=>{
        })
 
   } catch (error) {
+    console.log("USER DETAILS ERROR:", error);
       return res.status(500).json({
          message: error.message|| error,
          success:false,

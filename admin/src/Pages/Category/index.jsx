@@ -29,13 +29,13 @@ const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
 const Category = () => {
     const [categoryFilter, setCategoryFilter] = useState('');
         const Context=useContext(MyContext)
-        const[catData,setCatdata]=useState([]);
     
         useEffect(()=>{
            fetchDataFromApi("/api/category").then((res)=>{
-             setCatdata(res?.data)
+             Context?.setCatData(res?.data)
            })
         },[Context?.isOpenFullScreenPanel])
+        
         const handleChangeCatFilter = (event) => {
           setCategoryFilter(event.target.value);
         };
@@ -56,7 +56,7 @@ const Category = () => {
         const deleteCategory=(id)=>{
              deleteData(`/api/category/deleteCategory/${id}`).then((res)=>{
                  fetchDataFromApi("/api/category").then((res)=>{
-                   setCatdata(res?.data)
+                   Context?.setCatdata(res?.data)
                  })
              })
         }
@@ -101,9 +101,9 @@ const Category = () => {
            </TableHead>
            <TableBody>
             {
-              catData?.length !==0 &&  catData?.map((item)=>{
+              Context?.catData?.length !==0 &&  Context?.catData?.map((item,index)=>{
                 return(
-                   <TableRow>
+             <TableRow key={index}>
                 <TableCell >
                     <Checkbox {...label}  size='small'/>
                      
@@ -148,46 +148,7 @@ const Category = () => {
                 )
               })
             }
-            {/* <TableRow>
-                <TableCell >
-                    <Checkbox {...label}  size='small'/>
-                     
-                </TableCell>
-                <TableCell width={100}>
-                    <div className="flex items-center gap-4 w-[80px] ">
-                                           
-                        <div className="img w-full rounded-md overflow-hidden group">
-                            <Link to='/product/4567'>
-                               <img src='./Beauty.png' className='w-full group-hover:scale-105 transition-all' />
-                            </Link>
-                        </div>
-                       
-                    </div>
-                </TableCell>
-                  <TableCell width={100}>
-                      Fashion
-                  </TableCell>
-
-                <TableCell width={100}>
-                    <div className="flex items-center gap-1">
-                        <TooltipMUI title="Edit Product" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
-                                 <FiEdit3 className='text-[rgba(0,0,0,0.7)] text-[20px] '/>
-                            </Button>
-                        </TooltipMUI>
-                        <TooltipMUI title="View  Product Details" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
-                                 <FaRegEye className='text-[rgba(0,0,0,0.7)] text-[18px] '/>
-                            </Button>
-                        </TooltipMUI>
-                        <TooltipMUI title="Remove Product" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
-                                 <FaTrash className='text-[rgba(0,0,0,0.7)] text-[16px] '/>
-                            </Button>
-                        </TooltipMUI>
-                    </div>
-                </TableCell>
-            </TableRow> */}
+            
 
            
           

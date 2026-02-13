@@ -101,10 +101,11 @@ nav ul button:hover {background: none !important;}
 .swiper-button-prev,.swiper-button-next{
   display: flex !important ; align-items: center ;justify-content: center; background: #fff ; border-radius: 100% ; width: 45px ; height: 45px ; min-width: 45px ;
   box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d !important; transition: all 0.2s;
+  color: #000 !important;
 }
 
 .swiper-button-prev::after,.swiper-button-next::after{
-  font-size: 12px !important;
+  font-size: 22px !important;
   color: #000 ;
 }
 
@@ -217,13 +218,21 @@ footer form input::placeholder{
 
 .ZoomProductSliderThumbs .swiper-wrapper{
    padding-top: 38px !important ;
-   
+   position: relative;
+   top: 40px;
+}
+
+.ZoomProductSliderThumbs .swiper-slide{
+  position: relative;
+  top: 30px !important;
+  height: 100px !important;
+  overflow: hidden ;
+  border-radius: 5px;
 }
 
 .ZoomProductSliderThumbs .swiper-button-next {
   bottom:0px !important ;
-  right: inherit  !important;
-  top: inherit  !important;
+  left: 20px !important;
   width:100% !important ;
   height: 30px !important;
   border-radius: 0px !important;
@@ -235,8 +244,8 @@ footer form input::placeholder{
 
 .ZoomProductSliderThumbs .swiper-button-prev{
   
-  left: 0px !important;
-  top: 20px !important;
+  left: 20px !important;
+  top: 0px !important;
   width:100% !important ;
   height: 30px !important;
   border-radius: 0px !important;
@@ -244,6 +253,11 @@ footer form input::placeholder{
 
 .ZoomProductSliderThumbs .swiper-slide .item{
   opacity: 0.3;
+}
+.productContent .actions button{
+  min-width: 40px !important;
+  height: 30px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,

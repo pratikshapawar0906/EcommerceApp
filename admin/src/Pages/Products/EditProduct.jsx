@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Rating from '@mui/material/Rating';
@@ -9,10 +9,10 @@ import { IoMdClose } from 'react-icons/io';
 import Button from '@mui/material/Button';
 import { IoMdCloudUpload } from "react-icons/io";
 import { MyContext } from '../../App';
-import { deleteData, postData } from '../../utils/api';
+import { deleteData, editData, fetchDataFromApi, postData } from '../../utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const AddProducts = () => {
+const EditProduct = () => {
     const [productCat, setProductCat] = useState('');
     const [productSubCat, setProductSubCat] = useState('');
     const [productThridSubCat, setProductThridSubCat] = useState('');
@@ -35,7 +35,7 @@ const AddProducts = () => {
         subCat:"",
         thridSubCat:"",
         thridSubCatId:"",
-        category:"",
+        // category:"",
         countInStock:"",
         rating:"",
         isFeatured:false,
@@ -46,6 +46,43 @@ const AddProducts = () => {
         // location:[],   
 
       })
+
+      const id=Context?.isOpenFullScreenPanel?.id;
+      
+        useEffect(()=>{
+          fetchDataFromApi(`/api/product/getProduct/${id}`).then((res)=>{
+              const product = res?.product;
+                  setfromField({
+                  name: product.name,
+                  images: product.images,
+                  description: product.description,
+                  brand: product.brand,
+                  price: product.price,
+                  oldPrice: product.oldPrice,
+                  catName: product.catName,
+                  catId: product.catId,
+                  subCatId: product.subCatId,
+                  subCat: product.subCat,
+                  thridSubCat: product.thridSubCat,
+                  thridSubCatId: product.thridSubCatId,
+                  countInStock: product.countInStock,
+                  rating: product.rating,
+                  isFeatured: product.isFeatured,
+                  discount: product.discount,
+                  productRam: product.productRam || [],
+                  size: product.size || [],
+                  productWeight: product.productWeight || [],
+                });
+            
+                setPreview(product.images);
+            
+                setProductCat(product.catId);
+                setProductSubCat(product.subCatId);
+                setProductThridSubCat(product.thridSubCatId);
+                setProductFeatured(product.isFeatured ? 10 : 20);
+              });
+         
+        },[id]);
 
       const selectedCategory = Context?.catData?.find(
         cat => cat._id === productCat
@@ -63,7 +100,6 @@ const AddProducts = () => {
      setProductCat(selectedId);
      setProductSubCat('');
      setProductThridSubCat('');
-     formField.category=event.target.value;
    
      setfromField(prev => ({
        ...prev,
@@ -104,11 +140,13 @@ const AddProducts = () => {
   };
 
   const handleChangeProductFeatured = (event) => {
-      setProductFeatured(event.target.value);
+      const value = event.target.value === 10;
+
+      setProductFeatured(value);
     
       setfromField(prev => ({
         ...prev,
-        isFeatured: event.target.value
+        isFeatured: value
       }));
   };
 
@@ -187,7 +225,11 @@ const AddProducts = () => {
              Context.alertBox("error", "Please enter Product brand ");
               return  false
           }
-          if(formField.catId=== "" ){
+          if(formField.productRam.length=== 0 ){
+             Context.alertBox("error", "Please enter Product RAMS ");
+              return  false
+          }
+          if(formField.catName=== "" ){
              Context.alertBox("error", "Please enter Product Category ");
               return  false
           }
@@ -211,8 +253,11 @@ const AddProducts = () => {
              Context.alertBox("error", "Please enter Product Rating ");
               return  false
           }
-           
-          postData('/api/product/create',formField).then((res)=>{
+           if(formField.subCat=== "" ){
+             Context.alertBox("error", "Please enter Product Sub  Category ");
+              return  false
+          }
+          editData(`/api/product/updateProduct/${id}`,formField).then((res)=>{
             if(res?.success){
                Context.alertBox( "success",  res?.message || "Created category  successful!" );
                setTimeout(()=>{
@@ -220,7 +265,7 @@ const AddProducts = () => {
                     Context.setIsOpenFullScreenPanel({
                     open:false,
                 })
-                Context?.getCat();
+               
                },1500)
               
             } else {
@@ -232,7 +277,8 @@ const AddProducts = () => {
 
   return (
     <>
-      <section className="bg-gray-50 p-5">
+
+     <section className="bg-gray-50 p-5">
         <form action="" className="form p-8 py-3" onSubmit={handleSubmit}>
             <div className="scroll max-h-[700px] overflow-y-scroll pr-4 pt-4">
             <div className="grid grid-cols-1 mb-3">
@@ -343,8 +389,8 @@ const AddProducts = () => {
                       onChange={handleChangeProductFeatured}
                     >
                      
-                      <MenuItem value={true}>True</MenuItem>
-                      <MenuItem value={false}>False</MenuItem>
+                      <MenuItem value={10}>True</MenuItem>
+                      <MenuItem value={20}>False</MenuItem>
                       
                     </Select>
                 </div>    
@@ -376,7 +422,6 @@ const AddProducts = () => {
                 <div className="col">
                     <h3 className="text-[14px] font-[500] mb-1 text-black">Product RAMS</h3>
                     <Select
-                     
                       labelId="demo-simple-select-label"
                       id="productCatDrop"
                       size='small'
@@ -395,7 +440,6 @@ const AddProducts = () => {
                 <div className="col">
                     <h3 className="text-[14px] font-[500] mb-1 text-black ">Product Weight</h3>
                     <Select
-                      
                       labelId="demo-simple-select-label"
                       id="productSubCatDrop"
                       size='small'
@@ -414,7 +458,6 @@ const AddProducts = () => {
                 <div className="col">
                     <h3 className="text-[14px] font-[500] mb-1 text-black ">Product Size</h3>
                     <Select
-                     
                       labelId="demo-simple-select-label"
                       id="productSubCatDrop"
                       size='small'
@@ -459,7 +502,7 @@ const AddProducts = () => {
                           preview?.length  !==0 && preview?.map((image,index)=>
                             (
                                 <>
-                                <div className="uploadBoxWrapper relative"  key={image}>
+                                <div className="uploadBoxWrapper relative"  key={index}>
                                     <span className="absolute -top-[7px] -right-[7px] flex items-center justify-center w-[20px] h-[20px]
                                      rounded-full overflow-hidden bg-red-700 z-50 cursor-pointer "  onClick={()=>removeImage(image,index)}>
                                         <IoMdClose className='text-white text-[10px]' />
@@ -500,8 +543,9 @@ const AddProducts = () => {
             </Button>
         </form>
       </section>
+      
     </>
   )
 }
 
-export default AddProducts
+export default EditProduct

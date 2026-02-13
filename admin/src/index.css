@@ -86,3 +86,80 @@ input[type=number]::-webkit-outer-spin-button{
 .react-international-phone-input-container{
   border: 1px solid rgba(0, 0, 0, 0.1) !important ;
 }
+
+.Mui-focused fieldset legend{
+  display: none !important;
+}
+
+
+.ZoomProductSliderThumbs.space .swiper-wrapper{
+   padding-top: 38px !important ;
+   position: relative;
+   top: 40px;
+}
+.ZoomProductSliderThumbs .swiper-slide{
+  position: relative;
+  top: 30px !important;
+  height: 100px !important;
+  overflow: hidden ;
+  border-radius: 5px;
+}
+
+.ZoomProductSliderThumbs .swiper-button-next {
+  bottom:0px !important ;
+  left: 20px !important;
+  width:100% !important ;
+  height: 30px !important;
+  border-radius: 0px !important;
+}
+
+.ZoomProductSliderThumbs .swiper-button-next::after, .ZoomProductSliderThumbs .swiper-button-prev::after{
+  transform: rotate(90deg);
+}
+
+.ZoomProductSliderThumbs .swiper-button-prev{
+  
+  left: 20px !important;
+  top: 0px !important;
+  width:100% !important ;
+  height: 30px !important;
+  border-radius: 0px !important;
+}
+
+.ZoomProductSliderThumbs .swiper-slide .item{
+  opacity: 0.3 !important;
+}
+
+.swiper-slide .iiz{
+  height: 500px !important;
+  overflow: hidden !important;
+}
+
+.productContent .actions button{
+  min-width: 40px !important;
+  height: 30px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.swiper-button-prev,.swiper-button-next{
+  display: flex !important ; align-items: center !important ;justify-content: center !important; background: #fff ; border-radius: 100% !important; width: 45px !important ; height: 45px !important; min-width: 45px ;
+  box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d !important; transition: all 0.2s;
+  color: #000 !important;
+}
+
+.swiper-button-prev::after,.swiper-button-next::after{
+  font-size: 22px !important;
+  color: #000 ;
+}
+
+.smtBtn .swiper-button-prev, .smtBtn .swiper-button-next{
+   width: 30px !important;
+   height: 30px !important;
+   min-width: 30px !important;
+   top: 50% !important;
+}
+
+.smtBtn .swiper-button-prev::after,.smtBtn .swiper-button-next::after{
+  font-size: 18px !important;
+  color: #000 ;
+}

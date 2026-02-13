@@ -61,17 +61,17 @@ export const createProduct=async(req,res)=>{
      const product=await new Product({
        name: req.body.name,
        description: req.body.description,
-       images: imagesArr,
+       images: req.body.images,
        brand: req.body.brand || "",
        price: Number(req.body.price),
        oldPrice: Number(req.body.oldPrice),
        catName: req.body.catName,
+       category: req.body.category,
        catId: req.body.catId,
        subCatId: req.body.subCatId,
        subCat: req.body.subCat,
        thridSubCat: req.body.thridSubCat,
-       thridSubCatId: req.body.thridSubCatId,
-       category: req.body.category,
+       thridSubCatId: req.body.thridSubCatId,       
        countInStock: Number(req.body.countInStock),
        rating: Number(req.body.rating) || 0,
        isFeatured: req.body.isFeatured || false,
@@ -79,7 +79,7 @@ export const createProduct=async(req,res)=>{
        productRam: req.body.productRam,
        size: req.body.size,
        productWeight: req.body.productWeight,
-       location: req.body.location,
+       location: req.body.location || [],
      }).save();
 
     
@@ -652,7 +652,7 @@ export const deleteProductController = async (req, res) => {
     const product= await Product.findById(req.params.id).populate("category");
     const images=product.images;
 
-    for(img of images){
+    for(const img of images){
       const imgUrl=img;
       const urlArr=imgUrl.split("/");
       const image=urlArr[urlArr.length-1];
@@ -721,6 +721,7 @@ export const getProductController = async (req, res) => {
   }
 }
 
+//delete   Product
 export const removeImageFromProductController = async (req, res) => {
   try {
     const imgUrl=req.query.img;
@@ -760,7 +761,7 @@ export const updateProductController = async (req, res) => {
       {
        name: req.body.name,
        description: req.body.description,
-       images: imagesArr,
+       images: req.body.images,
        brand: req.body.brand || "",
        price: Number(req.body.price),
        oldPrice: Number(req.body.oldPrice),
@@ -812,3 +813,48 @@ export const updateProductController = async (req, res) => {
     });
   }
 }
+
+//delete Multiple  Product
+export const deleteMultipleProduct = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        message: "Invalid input",
+        success: false,
+        error: true
+      });
+    }
+
+    for (let i = 0; i < ids.length; i++) {
+      const product = await Product.findById(ids[i]);
+
+      if (product && product.images && product.images.length > 0) {
+        for (const imgUrl of product.images) {
+          const urlArr = imgUrl.split("/");
+          const image = urlArr[urlArr.length - 1];
+          const imageName = image.split(".")[0];
+
+          await cloudinary.uploader.destroy(imageName);
+        }
+      }
+    }
+
+    await Product.deleteMany({ _id: { $in: ids } });
+
+    return res.status(200).json({
+      message: "Delete Products Successfully",
+      success: true,
+      error: false
+    });
+
+  } catch (error) {
+    console.error("Product Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: true
+    });
+  }
+};

@@ -31,6 +31,8 @@ import { fetchDataFromApi } from './utils/api'
 import Profile from './Pages/Profile'
 import Address from './Pages/Address/AddAddress'
 import EditCategory from './Pages/Category/EditCategory'
+import EditProduct from './Pages/Products/EditProduct'
+import ProductDeatails from './Pages/Products/ProductDeatails'
 
 
 
@@ -48,11 +50,14 @@ function App() {
   const [isLogin, setIsLogin]=useState(false);
   const [userData,setUserData]=useState(null)
   const[address ,setAddress]=useState([])
+  const [categories, setCategories] = useState([]);
+  const[productData,setProductData]=useState([])
   const [isOpenFullScreenPanel, setIsOpenFullScreenPanel]=useState({
     open:false,
     model:'',
     id:""
   });
+  const [catData,setCatData]=useState([]);
 
   const alertBox=(type,msg)=>{
     if(type==="success"){
@@ -280,29 +285,74 @@ function App() {
         </>
       )
     },
+     {
+      path:"/productDetail/:id",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <ProductDeatails/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
+    
     
   ])
 
-   useEffect(() => {
-    const token = localStorage.getItem("accesstoken");
-    setIsLogin(!!token);
-     if (!token) {
-      setIsLogin(false);
-      return;
-    }
-    // if(token== !null && token !== "" && token !== undefined)
-    setIsLogin(true);
-    fetchDataFromApi(`/api/user/userDetails?token=${token}`)
-    .then(res => {
-      setUserData(res.data);
-      if (res.response?.data.error && res.response?.data.message === "You have not login") {
-        localStorage.removeItem("accesstoken");
-        localStorage.removeItem("refreshtoken");
-        alertBox("error", "Your session is closed. Please login again.");
-        window.location.href = "/login";
+  useEffect(() => {
+  const token = localStorage.getItem("accesstoken");
+
+  if (!token) {
+    setIsLogin(false);
+    return;
+  }
+
+  setIsLogin(true);
+  
+    fetchDataFromApi(`/api/user/userDetails`)
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch(error => {
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        forceLogout("Session expired. Please login again.");
       }
     });
   }, []);
+
+
+  useEffect(()=>{
+    getCat();
+  },[])
+
+  const forceLogout = (message) => {
+    localStorage.removeItem("accesstoken");
+    localStorage.removeItem("refreshtoken");
+  
+    setIsLogin(false);
+    setUserData(null);
+  
+    alertBox("error", message);
+  
+    window.location.href = "/login";
+  };
+
+  
+  const getCat=()=>{
+    fetchDataFromApi("/api/category").then((res)=>{
+       setCatData(res?.data)
+     })
+  }
 
   const values={
     isSidebarOpen,
@@ -315,7 +365,15 @@ function App() {
    userData,
    setUserData,
    setAddress,
-   address
+   address,
+   catData,
+   setCatData,
+   getCat,
+   categories,
+  setCategories,
+   productData,
+  setProductData,
+  forceLogout
    
   }
 
@@ -374,6 +432,9 @@ function App() {
         }
         {
           isOpenFullScreenPanel?.model ==='Edit Category' && <EditCategory/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Edit Product' && <EditProduct/>
         }
       </Dialog>
         <Toaster/>

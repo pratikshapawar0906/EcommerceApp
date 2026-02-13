@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createProduct, deleteProductController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRatingController, getProductController, removeImageFromProductController, updateProductController, uploadImagesController } from "../Controller/ProductController.js"
+import { createProduct, deleteMultipleProduct, deleteProductController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRatingController, getProductController, removeImageFromProductController, updateProductController, uploadImagesController } from "../Controller/ProductController.js"
 import { auth } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.js";
 
@@ -22,6 +22,6 @@ router.delete('/deleteProduct/:id',auth,deleteProductController);
 router.get('/getProduct/:id',getProductController);
 router.delete('/deleteProductImage',auth,removeImageFromProductController);
 router.put('/updateProduct/:id',auth,updateProductController);
-
+router.delete('/deleteMultipleProduct', deleteMultipleProduct)
 
 export default router
