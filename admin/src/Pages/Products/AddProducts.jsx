@@ -383,6 +383,7 @@ const AddProducts = () => {
                       className='w-full'
                       value={productRams}
                       label="Category"
+                      multiple
                       onChange={handleChangeProductRams}
                     >
                       <MenuItem value="4GB">4GB</MenuItem>
@@ -402,6 +403,7 @@ const AddProducts = () => {
                       className='w-full'
                       value={productWeight}
                       label="Category"
+                      multiple
                       onChange={handleChangeProductWeight}
                     >
                       <MenuItem value={''}>None</MenuItem>
@@ -420,6 +422,7 @@ const AddProducts = () => {
                       size='small'
                       className='w-full'
                       value={productSize}
+                      multiple
                       label="Category"
                       onChange={handleChangeProductSize}
                     >

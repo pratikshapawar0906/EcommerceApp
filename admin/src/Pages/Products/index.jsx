@@ -20,6 +20,7 @@ import { MyContext } from '../../App'
 import { deleteData, deleteMultipleData, fetchDataFromApi } from '../../utils/api'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const columns = [
  
@@ -62,39 +63,61 @@ const Products = () => {
     const [categorySubFilter, setCategorySubFilter] = useState('');
     const [categoryThridSubFilter, setCategoryThridSubFilter] = useState('');
     
-   const [filteredProducts, setFilteredProducts] = useState([]);
+   const [isLoading,setIsLoading] = useState(false);
     const Context=useContext(MyContext)
     const [sortedIds,setSortedIds]=useState([]);
     
 
     useEffect(() => {
+      setIsLoading(true)
       fetchDataFromApi("/api/product/getAllProducts").then((res) => {
-        Context?.setProductData(res?.data);
+         setTimeout(()=>{
+            Context?.setProductData(res?.data);
+            setIsLoading(false)
+         },1000)
       });
     }, [Context?.isOpenFullScreenPanel]);
 
 
     const handleChangeCatFilter = (event) => {
-      setCategoryFilter(event.target.value);  
+      setCategoryFilter(event.target.value); 
+      setCategorySubFilter('')
+      setCategoryThridSubFilter('')
+      setIsLoading(true) 
       fetchDataFromApi(`/api/product/getProdByCatId/${event.target.value}`)
       .then((res)=>{
         Context?.setProductData(res?.data);
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 300);
       })
     };
 
     const handleChangeSubCatFilter = (event) => {
      setCategorySubFilter(event.target.value);
+     setCategoryFilter("");
+     setCategoryThridSubFilter("");
+     setIsLoading(true) 
      fetchDataFromApi(`/api/product/getProdBySubCatId/${event.target.value}`)
       .then((res)=>{
         Context?.setProductData(res?.data);
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 300);
       })
     };
 
     const handleChangeThirdSubCatFilter = (event) => {
       setCategoryThridSubFilter(event.target.value);
+      setCategoryFilter(''); 
+      setCategorySubFilter('')
+      setIsLoading(true) 
       fetchDataFromApi(`/api/product/getProdByThirdSubCatId/${event.target.value}`)
       .then((res)=>{
         Context?.setProductData(res?.data);
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 300);
       })
     };
 
@@ -128,7 +151,6 @@ const Products = () => {
             return false
       }
 
-      console.log(sortedIds);
       try {
         deleteMultipleData(`/api/product/deleteMultipleProduct`,
          {ids:sortedIds},
@@ -290,7 +312,8 @@ const Products = () => {
            </TableHead>
            <TableBody>
            {
-            Context?.productData?.length !== 0 &&     Context?.productData?.slice(
+             isLoading === false ?
+              Context?.productData?.length !== 0 &&    Context?.productData?.slice(
               page * rowsPerPage, 
               page * rowsPerPage +rowsPerPage
             ) 
@@ -372,7 +395,19 @@ const Products = () => {
             </TableRow>
                 )
             })
+          : 
+              <TableRow>
+                <TableCell colSpan={8}>
+                     <div className="flex items-center justify-center w-full min-h-[400px]">
+                         <CircularProgress color='inherit'/>
+                     </div>
+                </TableCell>
+              </TableRow>
+              
            }
+
+
+           
            
           </TableBody>
         </Table>

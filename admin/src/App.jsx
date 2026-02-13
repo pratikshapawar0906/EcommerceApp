@@ -33,6 +33,7 @@ import Address from './Pages/Address/AddAddress'
 import EditCategory from './Pages/Category/EditCategory'
 import EditProduct from './Pages/Products/EditProduct'
 import ProductDeatails from './Pages/Products/ProductDeatails'
+import AddRAMS from './Pages/Products/AddRAMS'
 
 
 
@@ -285,7 +286,7 @@ function App() {
         </>
       )
     },
-     {
+    {
       path:"/productDetail/:id",
       exact:true,
       element:(
@@ -299,6 +300,26 @@ function App() {
 
              <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
               <ProductDeatails/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
+     {
+      path:"/productDetail/addRAMS",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <AddRAMS/>
              </div>
            </div>
         </section>
