@@ -12,7 +12,7 @@ import productRouter from './Router/productRoute.js'
 import cartProductRouter from './Router/cartProductRoute.js'
 import myListRouter from './Router/myListRoute.js'
 import addressRouter from './Router/addressRoute.js'
-
+import homeSliderRoute from "./Router/homeSliderRoute.js";
 
 
 const app = express();
@@ -46,6 +46,7 @@ app.use('/api/product',productRouter)
 app.use('/api/cartProduct',cartProductRouter)
 app.use('/api/myList',myListRouter)
 app.use('/api/address',addressRouter)
+app.use('/api/BannerSlider', homeSliderRoute)
 
 app.listen(PORT, () => {
   console.log(` Server running on  ${PORT}`);

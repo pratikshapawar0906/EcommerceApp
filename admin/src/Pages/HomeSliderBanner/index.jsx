@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
@@ -17,6 +17,7 @@ import { FaRegEye, FaTrash } from 'react-icons/fa6'
 import { Link } from 'react-router-dom';
 import SearchBox from '../../Component/SearchBox';
 import { MyContext } from '../../App'
+import { deleteData, fetchDataFromApi } from '../../utils/api'
 
 const columns = [
  
@@ -27,12 +28,16 @@ const columns = [
 
 const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
 const HomeSliderBanner = () => {
-    const [categoryFilter, setCategoryFilter] = useState('');
+    const [images, setImages] = useState([]);
         const Context=useContext(MyContext)
+
+        useEffect(()=>{
+           fetchDataFromApi("/api/BannerSlider/get").then((res)=>{
+             setImages(res?.data)
+           })
+        },[Context?.isOpenFullScreenPanel])
     
-        const handleChangeCatFilter = (event) => {
-          setCategoryFilter(event.target.value);
-        };
+        
         
     
         const [page, setPage] = useState(0);
@@ -46,6 +51,14 @@ const HomeSliderBanner = () => {
           setRowsPerPage(+event.target.value);
           setPage(0);
         };
+
+        const deleteBannerImage=(id)=>{
+             deleteData(`/api/BannerSlider/deleteImageSlider/${id}`).then((res)=>{
+                 fetchDataFromApi("/api/BannerSlider/get").then((res)=>{
+                   Context?.setCatdata(res?.data)
+                 })
+             })
+        }
   return (
     <>
        <div className="flex items-center justify-between px-2 py-0 mt-3">
@@ -86,8 +99,13 @@ const HomeSliderBanner = () => {
             </TableRow>
            </TableHead>
            <TableBody>
-            <TableRow>
+            {
+                    images?.length !== 0 && images.map((item, index) =>
+                       item.images.map((img, imgIndex) => (
+
+                        <TableRow key={`${item._id}-${imgIndex}`}>
                 <TableCell >
+                  
                     <Checkbox {...label}  size='small'/>
                      
                 </TableCell>
@@ -96,7 +114,7 @@ const HomeSliderBanner = () => {
                                            
                         <div className="img w-full rounded-md overflow-hidden group">
                             <Link to='/product/4567'>
-                               <img src='./Banner_Img1.jpg' className='w-full group-hover:scale-105 transition-all' />
+                               <img src={img} className='w-full group-hover:scale-105 transition-all' />
                             </Link>
                         </div>
                        
@@ -106,23 +124,29 @@ const HomeSliderBanner = () => {
                 <TableCell width={100}>
                     <div className="flex items-center gap-1">
                         <TooltipMUI title="Edit Product" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
+                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                            onClick={()=>Context.setIsOpenFullScreenPanel({
+                                open:true,
+                                model:'Edit Banner',
+                                id:item?._id
+                            })}>
                                  <FiEdit3 className='text-[rgba(0,0,0,0.7)] text-[20px] '/>
                             </Button>
                         </TooltipMUI>
-                        <TooltipMUI title="View  Product Details" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
-                                 <FaRegEye className='text-[rgba(0,0,0,0.7)] text-[18px] '/>
-                            </Button>
-                        </TooltipMUI>
+                        
                         <TooltipMUI title="Remove Product" placement="top">
-                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
+                            <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                             onClick={()=>deleteBannerImage(item?._id)}>
                                  <FaTrash className='text-[rgba(0,0,0,0.7)] text-[16px] '/>
                             </Button>
                         </TooltipMUI>
                     </div>
                 </TableCell>
             </TableRow>
+             ))
+    )
+                  }
+            
 
            
           

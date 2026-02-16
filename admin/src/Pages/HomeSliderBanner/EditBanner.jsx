@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoMdClose, IoMdCloudUpload } from 'react-icons/io'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -6,10 +6,10 @@ import UploadBox from '../../Component/UploadBox'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import { MyContext } from '../../App'
-import { deleteData, postData } from '../../utils/api'
+import { deleteData, editData, fetchDataFromApi, postData } from '../../utils/api'
 
-const AddHomeSlider = () => {
-  const [preview,setPreview]=useState([])
+const EditBanner = () => {
+    const [preview,setPreview]=useState([])
    const[isLoading,setIsLoading]=useState(false);
    const Context=useContext(MyContext)
 
@@ -17,15 +17,14 @@ const AddHomeSlider = () => {
     images:[],  
   })
 
-  // const onChangeInput=(e)=>{
-  //  const {name, value}=e.target
-  //   setfromField(()=>{
-  //     return{
-  //      ...formField,
-  //      [name]: value
-  //     }
-  //   })
-  // }
+
+  const id=Context?.isOpenFullScreenPanel?.id;
+  
+    useEffect(()=>{
+      fetchDataFromApi(`/api/BannerSlider/${id}`).then((res)=>{
+            setPreview(res?.banner?.images)
+        })
+    },[Context?.isOpenFullScreenPanel])
 
   const setPreviewFun=(previewArr)=>{
     setPreview((prev) => [...prev, ...previewArr]);
@@ -64,7 +63,7 @@ const AddHomeSlider = () => {
               return  false
           }
 
-          postData('/api/BannerSlider/createBanner',formField).then((res)=>{
+          editData(`/api/BannerSlider/updateHomeSlider/${id}`,formField).then((res)=>{
             if(res?.success){
                Context.alertBox( "success",  res?.message || "Upload Banner successful!" );
                setTimeout(()=>{
@@ -83,7 +82,7 @@ const AddHomeSlider = () => {
     }
   return (
     <>
-      <section className="bg-gray-50 p-5">
+     <section className="bg-gray-50 p-5">
         <form action="" className="form p-8 py-3"  onSubmit={handleSubmit}>
             <div className="scroll max-h-[700px] overflow-y-scroll pr-4">
                   <div className="grid grid-cols-7 gap-4">
@@ -136,4 +135,4 @@ const AddHomeSlider = () => {
   )
 }
 
-export default AddHomeSlider
+export default EditBanner

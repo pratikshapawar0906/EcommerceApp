@@ -34,6 +34,7 @@ import EditCategory from './Pages/Category/EditCategory'
 import EditProduct from './Pages/Products/EditProduct'
 import ProductDeatails from './Pages/Products/ProductDeatails'
 import AddRAMS from './Pages/Products/AddRAMS'
+import EditBanner from './Pages/HomeSliderBanner/EditBanner'
 
 
 
@@ -457,6 +458,9 @@ function App() {
         }
         {
           isOpenFullScreenPanel?.model ==='Edit Product' && <EditProduct/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Edit Banner' && <EditBanner/>
         }
         
       </Dialog>

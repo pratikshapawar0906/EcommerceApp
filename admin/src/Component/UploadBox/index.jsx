@@ -36,7 +36,7 @@ const UploadBox = (props) => {
                 return false
             }
         }
-        uploadImage("/api/category/upload-Image",formdata).then((res)=>{
+        uploadImage(props.url,formdata).then((res)=>{
         setuploading(false)
         props.setPreviewFun(res.data.images);
 
