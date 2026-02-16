@@ -9,7 +9,7 @@ import { IoMdClose } from 'react-icons/io';
 import Button from '@mui/material/Button';
 import { IoMdCloudUpload } from "react-icons/io";
 import { MyContext } from '../../App';
-import { deleteData, editData, fetchDataFromApi, postData } from '../../utils/api';
+import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const EditProduct = () => {

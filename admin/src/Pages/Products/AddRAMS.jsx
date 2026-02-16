@@ -1,63 +1,89 @@
-import React, { useState } from 'react'
-import { postData } from '../../utils/api';
-import Select from '@mui/material/Select';
+import React, { useContext, useEffect, useState } from 'react'
+import { deleteData, editData, fetchDataFromApi, postData } from '../../utils/api';
 import Button from '@mui/material/Button';
 import { IoMdCloudUpload } from 'react-icons/io';
-import CircularProgress from '@mui/material/CircularProgress';
 import Checkbox from '@mui/material/Checkbox';
 import { FiEdit3 } from 'react-icons/fi';
 import {  FaTrash } from 'react-icons/fa6';
 import TooltipMUI from '@mui/material/Tooltip'
+import { MyContext } from '../../App';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
 
 const AddRAMS = () => {
-    const [productRams, setProductRams] = useState('');
-    const[formField,setfromField]=useState({productRam:[]});
+    const[name,setName]=useState()
+    const[data,setData]=useState([]);
     const[isLoading,setIsLoading]=useState(false);
-
-    const onChangeInput=(e)=>{
-     const {name, value}=e.target
-      setfromField(prev => ({
-        ...prev,
-        [name]: value
-      }));
+    const Context=useContext(MyContext)
+    const[editMode, setEditMode]=useState(false)
+    
+    useEffect(()=>{
+        getData();
+    },[])
+    
+    const getData=()=>{
+        fetchDataFromApi("/api/product/getAllProductsRAMS").then((res)=>{
+          setData(res?.data)  
+        })
     }
-
-
-    const handleChangeProductRams = (event) => {
-      setProductRams(event.target.value);
-        setfromField(prev => ({
-        ...prev,
-        productRam: [event.target.value]
-      }));
-    };
 
     const handleSubmit=(e)=>{
       e.preventDefault();
     
       setIsLoading(true);
-          if(formField.productRam === 0 ){
-             Context.alertBox("error", "Please enter Product  name ");
+          if(name === "" ){
+             Context.alertBox("error", "Please enter Product  Rams ");
               return false
           }
-          postData('/api/product/create',formField).then((res)=>{
+          if(editMode == ""){
+              postData('/api/product/productRAMS/create',{
+                name:name
+          }).then((res)=>{  
             if(res?.success){
-               Context.alertBox( "success",  res?.message || "Created category  successful!" );
-               setTimeout(()=>{
+               Context.alertBox( "success",  res?.message || "Created Product Rams  successfully!" );
                 setIsLoading(false)
-                    Context.setIsOpenFullScreenPanel({
-                    open:false,
-                })
-                Context?.getCat();
-               },1500)
-              
+                getData();
+                setName('')
             } else {
                Context.alertBox( "error", res?.message || "Something went wrong!" );
                 setIsLoading(false)
             }
           })
+          }else if(editMode !== ""){
+            editData(`/api/product/updateProductRAMS/${editMode}`,{
+                name:name
+          }).then((res)=>{  
+            if(res?.success){
+               Context.alertBox( "success",  res?.message || "Created Product Rams  successfully!" );
+                setIsLoading(false)
+                getData();
+                setName('')
+            } else {
+               Context.alertBox( "error", res?.message || "Something went wrong!" );
+                setIsLoading(false)
+            }
+          })
+          }
+          
     }
+
+    const deleteRams=(id)=>{
+        deleteData(`/api/product/deleteProductRAMS/${id}`).then((res)=>{
+            getData();
+            Context.alertBox("Success","Product Rams deleted")
+            
+        })
+    }
+
+    const editItem=(id)=>{
+        fetchDataFromApi(`/api/product/getProductsRAMS/${id}`).then((res)=>{  
+               setName(res?.data?.name)
+               setEditMode(res?.data?._id);
+              })
+                    
+        }
+    
   return (
     <>
         <div className="flex items-center justify-between px-2 py-0 mt-3">
@@ -68,20 +94,28 @@ const AddRAMS = () => {
             <form action="" className="form py-2 p-6" onSubmit={handleSubmit}>
                 <div className="col mb-4">
                     <h3 className="text-[14px] font-[500] mb-1 text-black">Product RAM</h3>
-                    <input type='Number' className='w-full h-[40px] border border-[rgba(0,0,0,0.2)]
-                    focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm '   />
+                    <input type='text' className='w-full h-[40px] border border-[rgba(0,0,0,0.2)]
+                    focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm ' 
+                    name='name' value={name} onChange={(e)=>setName(e.target.value)}  />
                 </div>
 
                 <Button type="submit"  className="btn-blue btn-lg  w-full flex gap-2">
+                    {
+                       isLoading === true ? <CircularProgress color='inherit'/> :
+                       <>
+                       <IoMdCloudUpload className='text-[25px] text-white' />Publish and view
+                       </> 
+                    }
                 
-                    <IoMdCloudUpload className='text-[25px] text-white' />Publish and view
+                    
                    
                 </Button>
             </form>
         </div>
+        {
+            data?.length !==0 && 
 
-
-        <div className="card my-4 pt-5 pb-5 shadow-md sm:rounded-lg bg-white w-[65%]">
+            <div className="card my-4 pt-5 pb-5 shadow-md sm:rounded-lg bg-white w-[65%]">
           <div className="relative overflow-x-auto mt-5 pb-5">
                 <table className="w-full text-sm text-left rtl:text-right text-body text-gray-500 dark:text-gary-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gary-400 ">
@@ -101,35 +135,51 @@ const AddRAMS = () => {
                         </tr>
                     </thead>
                     <tbody>
-                         
-                        <tr className='odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default'>
-                           <th scope="rows" className="px-6 pr-0 py-2 font-medium">
-                                  <div className="w-[60px]">
-                                     <Checkbox {...label} size='small' />
-                                  </div>
-                           </th>
-                           <td className="px-0 py-2 font-medium">
-                              2GB
-                           </td>
+                    {data?.map((item, index) => (
+                        <tr
+                          className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default"
+                          key={item?._id}
+                        >
+                          <th className="px-6 pr-0 py-2 font-medium">
+                            <div className="w-[60%]">
+                            <Checkbox {...label} size="small" />
+                            </div>
+                          </th>
+                    
+                          <td className="px-0 py-2 font-medium">
+                            <span className="font-[600]">
+                                 {item?.name}
+                            </span>
+                          </td>
                            <td className="px-6 py-2 font-medium">
                                <div className="flex items-center gap-1">
                                    <TooltipMUI title="Edit Product" placement="top">
-                                       <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
+                                       <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                                        onClick={()=>editItem(item?._id)}>
                                             <FiEdit3 className='text-[rgba(0,0,0,0.7)] text-[20px] '/>
                                        </Button>
                                    </TooltipMUI>
                                    <TooltipMUI title="Remove Product" placement="top">
-                                       <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}>
+                                       <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
+                                       onClick={()=>deleteRams(item?._id)}>
                                             <FaTrash className='text-[rgba(0,0,0,0.7)] text-[16px] '/>
                                        </Button>
                                    </TooltipMUI>
                                </div>
                            </td>
-                        </tr>     
+                            </tr> 
+                            )
+                         )
+                    }
+                     
                     </tbody >
                 </table>
           </div>
-        </div>
+            </div>
+        }
+
+
+       
 
           
 

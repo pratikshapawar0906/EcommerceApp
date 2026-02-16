@@ -37,6 +37,7 @@ import AddRAMS from './Pages/Products/AddRAMS'
 
 
 
+
 const MyContext =createContext();
 
 
@@ -306,7 +307,7 @@ function App() {
         </>
       )
     },
-     {
+    {
       path:"/productDetail/addRAMS",
       exact:true,
       element:(
@@ -457,6 +458,7 @@ function App() {
         {
           isOpenFullScreenPanel?.model ==='Edit Product' && <EditProduct/>
         }
+        
       </Dialog>
         <Toaster/>
     </MyContext.Provider>
