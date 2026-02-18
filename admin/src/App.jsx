@@ -35,6 +35,8 @@ import EditProduct from './Pages/Products/EditProduct'
 import ProductDeatails from './Pages/Products/ProductDeatails'
 import AddRAMS from './Pages/Products/AddRAMS'
 import EditBanner from './Pages/HomeSliderBanner/EditBanner'
+import AddWeight from './Pages/Products/AddWeight'
+import AddSize from './Pages/Products/AddSize'
 
 
 
@@ -322,6 +324,46 @@ function App() {
 
              <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
               <AddRAMS/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
+    {
+      path:"/productDetail/addWeight",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <AddWeight/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
+    {
+      path:"/productDetail/addSize",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <AddSize/>
              </div>
            </div>
         </section>

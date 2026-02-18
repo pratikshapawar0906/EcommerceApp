@@ -2,6 +2,8 @@ import Product from "../model/ProductSchema.js"
 import cloudinary from "../middleware/cloudinary.js";
 import fs from "fs"
 import Rams from "../model/ProductRamsSchema.js";
+import Weight from "../model/ProductWeightSchema.js";
+import Size from "../model/ProductSizeSchema.js";
 
 
 
@@ -861,6 +863,8 @@ export const deleteMultipleProduct = async (req, res) => {
 };
 
 
+
+//create rams
 export const createProductRAMS=async(req,res)=>{
    try {
      const productRAMS=await new Rams({
@@ -893,7 +897,7 @@ export const createProductRAMS=async(req,res)=>{
     }); 
    }
 }
-
+//delete Rams 
 export const deleteProductRAMSController = async (req, res) => {
   try {
 
@@ -934,6 +938,8 @@ export const deleteProductRAMSController = async (req, res) => {
   }
 }
 
+
+//get rams
 export const getAllProductRAMSController = async (req, res) => {
   try {
 
@@ -966,6 +972,7 @@ export const getAllProductRAMSController = async (req, res) => {
   }
 }
 
+//update rams
 export const updateProductRAMSController = async (req, res) => {
   try {
 
@@ -1004,7 +1011,7 @@ export const updateProductRAMSController = async (req, res) => {
   }
 }
 
-
+//delete rams
 export const deleteMultipleProductRAMS = async (req, res) => {
   try {
     const { ids } = req.body;
@@ -1035,6 +1042,7 @@ export const deleteMultipleProductRAMS = async (req, res) => {
   }
 };
 
+// get rams by ID
 export const getProductRAMSByIdController = async (req, res) => {
   try {
 
@@ -1068,3 +1076,431 @@ export const getProductRAMSByIdController = async (req, res) => {
     });
   }
 }
+
+
+// create Weight
+export const createProductWeight=async(req,res)=>{
+   try {
+     const productWeight=await new Weight({
+       name: req.body.name,
+       
+     }).save();
+
+     if(!productWeight){
+        res.status(400).json({
+          success: false,
+          message: "Product not created",
+          error:true,
+        })
+     }
+     
+    
+    return  res.status(200).json({
+      message:"Product Weight Created Successfully",
+      success: true,
+      error:false,
+      productWeight:productWeight,
+    });
+
+   } catch (error) {
+
+    res.status(500).json({
+         success: false,
+         message: error.message || error,
+         error:true,
+    }); 
+   }
+}
+//delete Weight
+export const deleteProductWeightController = async (req, res) => {
+  try {
+
+    const productWeight= await Weight.findById(req.params.id);
+
+    if(!productWeight){
+      return  res.status(400).json({
+            message:"Product Rams is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    const deleteProductWeight =await Weight.findByIdAndDelete(req.params.id);
+    
+    if(!deleteProductWeight){
+      return  res.status(400).json({
+            message:"Item is not Deleted",
+            error:true,
+            success:false
+        })
+    }
+
+    return  res.status(200).json({
+      message:" Weight  Deleted Successfully",
+      success: true,
+      error:false,
+    });
+    
+  } catch (error) {
+      console.error("Product Deleting Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+
+//get Weight
+export const getAllProductWeightController = async (req, res) => {
+  try {
+
+
+    const weight= await Weight.find();
+    
+    if(!weight){
+        res.status(400).json({
+            message:"Product Weight is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Weight Successfully",
+      success: true,
+      error:false,
+      data:weight,
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+//update Weight
+export const updateProductWeightController = async (req, res) => {
+  try {
+
+    const productWeight=await  Weight.findByIdAndUpdate(
+      req.params.id,
+      {
+       name: req.body.name,
+     },{
+      new:true
+     }
+    );
+
+    if(!productWeight){
+      return  res.status(400).json({
+            message:"Product is not available",
+            error:true,
+            success:false
+        })
+    }
+
+
+    return  res.status(200).json({
+      message:" Product Weight Updated Successfully",
+      success: true,
+      error:false,
+      productWeight:productWeight
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+//delete Weight
+export const deleteMultipleProductWeight = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        message: "Invalid input",
+        success: false,
+        error: true
+      });
+    }
+
+    await Weight.deleteMany({ _id: { $in: ids } });
+
+    return res.status(200).json({
+      message: "Delete Products Weight Successfully",
+      success: true,
+      error: false
+    });
+
+  } catch (error) {
+    console.error("Product Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: true
+    });
+  }
+};
+
+// get Weight by ID
+export const getProductWeightByIdController = async (req, res) => {
+  try {
+
+
+    const weight= await Weight.findById({
+      _id: req.params.id
+    });
+    
+    if(!weight){
+        res.status(400).json({
+            message:"Product Weight is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Weight Successfully",
+      success: true,
+      error:false,
+      data:weight,
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+// create Size
+export const createProductSize=async(req,res)=>{
+   try {
+     const productSize=await new Size({
+       name: req.body.name,
+       
+     }).save();
+
+     if(!productSize){
+        res.status(400).json({
+          success: false,
+          message: "Product not created",
+          error:true,
+        })
+     }
+     
+    
+    return  res.status(200).json({
+      message:"Product Size Created Successfully",
+      success: true,
+      error:false,
+      productSize:productSize,
+    });
+
+   } catch (error) {
+
+    res.status(500).json({
+         success: false,
+         message: error.message || error,
+         error:true,
+    }); 
+   }
+}
+//delete Size
+export const deleteProductSizeController = async (req, res) => {
+  try {
+
+    const productSize= await Size.findById(req.params.id);
+
+    if(!productSize){
+      return  res.status(400).json({
+            message:"Product Size is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    const deleteProductSize =await Size.findByIdAndDelete(req.params.id);
+    
+    if(!deleteProductSize){
+      return  res.status(400).json({
+            message:"Item is not Deleted",
+            error:true,
+            success:false
+        })
+    }
+
+    return  res.status(200).json({
+      message:" Size  Deleted Successfully",
+      success: true,
+      error:false,
+    });
+    
+  } catch (error) {
+      console.error("Product Deleting Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+//get Size
+export const getAllProductSizeController = async (req, res) => {
+  try {
+
+
+    const size= await Size.find();
+    
+    if(!size){
+        res.status(400).json({
+            message:"Product Size is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Size Successfully",
+      success: true,
+      error:false,
+      data:size,
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+//update Size
+export const updateProductSizeController = async (req, res) => {
+  try {
+
+    const productSize=await  Size.findByIdAndUpdate(
+      req.params.id,
+      {
+       name: req.body.name,
+     },{
+      new:true
+     }
+    );
+
+    if(!productSize){
+      return  res.status(400).json({
+            message:"Product is not available",
+            error:true,
+            success:false
+        })
+    }
+
+
+    return  res.status(200).json({
+      message:" Product Size Updated Successfully",
+      success: true,
+      error:false,
+      productSize:productSize
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+//delete Size
+export const deleteMultipleProductSize = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        message: "Invalid input",
+        success: false,
+        error: true
+      });
+    }
+
+    await Size.deleteMany({ _id: { $in: ids } });
+
+    return res.status(200).json({
+      message: "Delete Products Size Successfully",
+      success: true,
+      error: false
+    });
+
+  } catch (error) {
+    console.error("Product Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: true
+    });
+  }
+};
+
+// get Size by ID
+export const getProductSizeByIdController = async (req, res) => {
+  try {
+
+
+    const size= await Size.findById({
+      _id: req.params.id
+    });
+    
+    if(!size){
+        res.status(400).json({
+            message:"Product Size is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Size Successfully",
+      success: true,
+      error:false,
+      data:size,
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+

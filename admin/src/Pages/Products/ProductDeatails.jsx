@@ -120,11 +120,16 @@ const ProductDeatails = () => {
     
                             <div className="flex items-center gap-2 ">
                                 {
-                                   product?.productRam?.map((index)=>{
-                                      return(
-                                             <span className="inline-block shadow-sm p-1 bg-[#fff] text-[12px] font-[500]"key={index} >{product?.productRam}</span>
-                                      )
-                                   }) 
+                                  product?.productRam?.map((item, index) => {
+                                    return (
+                                      <span
+                                        key={index}
+                                        className="inline-block shadow-sm p-1 bg-[#fff] text-[12px] font-[500]"
+                                      >
+                                        {item}
+                                      </span>
+                                    );
+                                  })
                                         
                                 }
                             </div>
@@ -140,12 +145,16 @@ const ProductDeatails = () => {
     
                            <div className="flex items-center gap-2 ">
                                 {
-                                   product?.size?.map((index)=>{
-                                      return(
-                                        <span className=" inline-block shadow-sm p-1 bg-[#fff] text-[12px] font-[500]"key={index} >{product?.size}</span>
-                                         )
-                                   }) 
-                                        
+                                   product?.size?.map((item, index) => {
+                                      return (
+                                        <span
+                                          key={index}
+                                          className="inline-block shadow-sm p-1 bg-[#fff] text-[12px] font-[500]"
+                                        >
+                                          {item}
+                                        </span>
+                                      );
+                                    })  
                                 }
                             </div>
                     </div>

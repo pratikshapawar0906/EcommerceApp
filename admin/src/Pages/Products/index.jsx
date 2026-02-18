@@ -21,6 +21,7 @@ import { deleteData, deleteMultipleData, fetchDataFromApi } from '../../utils/ap
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import CircularProgress from '@mui/material/CircularProgress'
+import Rating from '@mui/material/Rating'
 
 const columns = [
  
@@ -45,6 +46,12 @@ const columns = [
     minWidth: 150,
     
     
+    },
+    {
+      id: 'ratings',
+    label: 'Rating',
+    minWidth: 150,
+
     },
      {
     id: 'Action',
@@ -361,7 +368,14 @@ const Products = () => {
                        <span className='Price text-[#3872fa] text-[14px] font-[600]'> &#x20b9;{item.price}</span>
                     </div></TableCell>
                 <TableCell style={{minWidth:columns.minWidth}}>
-                    <p className="text-[14px] w-[100px]"><span className="font-[600]">{item.sale} </span>rating</p>
+                    <p className="text-[14px] w-[100px]"><span className="font-[600]">{item.sale} </span></p>
+                       
+                </TableCell>
+
+                <TableCell style={{minWidth:columns.minWidth}}>
+                    <p className="text-[14px] w-[100px]">
+                      <Rating defaultValue={item?.rating} size='small' />
+                    </p>
                        
                 </TableCell>
                 <TableCell style={{minWidth:columns.minWidth}}>

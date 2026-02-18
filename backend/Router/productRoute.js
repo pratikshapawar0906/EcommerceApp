@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createProduct, createProductRAMS, deleteMultipleProduct, deleteMultipleProductRAMS, deleteProductController, deleteProductRAMSController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRAMSController, getAllProductRatingController, getProductController, getProductRAMSByIdController, removeImageFromProductController, updateProductController, updateProductRAMSController, uploadImagesController } from "../Controller/ProductController.js"
+import { createProduct, createProductRAMS, createProductSize, createProductWeight, deleteMultipleProduct, deleteMultipleProductRAMS, deleteMultipleProductSize, deleteMultipleProductWeight, deleteProductController, deleteProductRAMSController, deleteProductSizeController, deleteProductWeightController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRAMSController, getAllProductRatingController, getAllProductSizeController, getAllProductWeightController, getProductController, getProductRAMSByIdController, getProductSizeByIdController, getProductWeightByIdController, removeImageFromProductController, updateProductController, updateProductRAMSController, updateProductSizeController, updateProductWeightController, uploadImagesController } from "../Controller/ProductController.js"
 import { auth } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.js";
 
@@ -29,5 +29,21 @@ router.put('/updateProductRAMS/:id',auth,updateProductRAMSController);
 router.delete('/deleteMultipleProduct', deleteMultipleProduct)
 router.delete('/deleteProductRAMS/:id', deleteProductRAMSController)
 router.delete('/deleteMultipleProductRAMS', deleteMultipleProductRAMS)
+
+// weight
+router.post('/productWeight/create',auth,createProductWeight);
+router.get('/getAllProductsWeight',getAllProductWeightController);
+router.get('/getProductsWeight/:id',getProductWeightByIdController);
+router.put('/updateProductWeight/:id',auth,updateProductWeightController);
+router.delete('/deleteProductWeight/:id', deleteProductWeightController)
+router.delete('/deleteMultipleProductWeight', deleteMultipleProductWeight)
+
+// size
+router.post('/productSize/create',auth,createProductSize);
+router.get('/getAllProductsSize',getAllProductSizeController);
+router.get('/getProductsSize/:id',getProductSizeByIdController);
+router.put('/updateProductSize/:id',auth,updateProductSizeController);
+router.delete('/deleteProductSize/:id', deleteProductSizeController)
+router.delete('/deleteMultipleProductSize', deleteMultipleProductSize)
 
 export default router
