@@ -68,7 +68,7 @@ export const createCategoryController = async (req, res) => {
         images:imagesArr,
         // color:req.body.color,
         parentId:req.body.parentId,
-        parentCatName:req.body. parentCatName
+        parentCatName:req.body.parentCatName
      })
      
      if(!category){

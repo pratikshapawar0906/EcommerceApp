@@ -32,7 +32,7 @@ const AddHomeSlider = () => {
   const removeImage=(image,index)=>{
     var imageArr=[];
     imageArr=preview;
-    deleteData(`/api/BannerSlider/deleteImageSlider?img=${image}`).then((res)=>{
+    deleteData(`/api/homeSlider/deleteImageSlider?img=${image}`).then((res)=>{
         imageArr.splice(index,1);
         setPreview([]);
         setTimeout(()=>{
@@ -57,9 +57,9 @@ const AddHomeSlider = () => {
               return  false
           }
 
-          postData('/api/BannerSlider/createBanner',formField).then((res)=>{
+          postData('/api/homeSlider/createHomeSlider',formField).then((res)=>{
             if(res?.success){
-               Context.alertBox( "success",  res?.message || "Upload Banner successful!" );
+               Context.alertBox( "success",  res?.message || "Upload Home Slider successful!" );
                setTimeout(()=>{
                 setIsLoading(false)
                     Context.setIsOpenFullScreenPanel({
@@ -107,7 +107,7 @@ const AddHomeSlider = () => {
                     
 
                    
-                    <UploadBox  multiple={true} name="Banner" url="/api/BannerSlider/uploadHomeSlider" setPreviewFun={setPreviewFun}/>
+                    <UploadBox  multiple={true} name="HomeSlider" url="/api/homeSlider/uploadHomeSlider" setPreviewFun={setPreviewFun}/>
                 </div>
             </div>
             <br/>

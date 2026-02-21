@@ -65,7 +65,9 @@ p{
 }
 .container{width :95%; margin: auto;}
 
-header .top-strip{}
+header{
+  box-shadow: 0px 1px 5px #0000001a;
+}
 
 .bg-org{background-color: #ff5252;}
 
@@ -109,6 +111,12 @@ nav ul button:hover {background: none !important;}
   color: #000 ;
 }
 
+.swiper-button-prev svg,
+.swiper-button-next svg {
+  width: 18px;
+  height: 18px;
+}
+
 .smtBtn .swiper-button-prev, .smtBtn .swiper-button-next{
    width: 30px !important;
    height: 30px !important;
@@ -120,6 +128,7 @@ nav ul button:hover {background: none !important;}
   font-size: 18px !important;
   color: #000 ;
 }
+
 
 .homeCatslider{
   overflow: inherit !important;

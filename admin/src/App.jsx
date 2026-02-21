@@ -34,9 +34,12 @@ import EditCategory from './Pages/Category/EditCategory'
 import EditProduct from './Pages/Products/EditProduct'
 import ProductDeatails from './Pages/Products/ProductDeatails'
 import AddRAMS from './Pages/Products/AddRAMS'
-import EditBanner from './Pages/HomeSliderBanner/EditBanner'
 import AddWeight from './Pages/Products/AddWeight'
 import AddSize from './Pages/Products/AddSize'
+import AddBannersV1 from './Pages/Banners/addBannersV1'
+import EditHomeSlider from './Pages/HomeSliderBanner/EditHomeSlider'
+import BannerV1List from './Pages/Banners/BannerV1List'
+import EditBanners from './Pages/Banners/EditBanners'
 
 
 
@@ -370,6 +373,26 @@ function App() {
         </>
       )
     },
+    {
+      path:"/banner/List",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <BannerV1List/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
     
     
   ])
@@ -502,7 +525,13 @@ function App() {
           isOpenFullScreenPanel?.model ==='Edit Product' && <EditProduct/>
         }
         {
-          isOpenFullScreenPanel?.model ==='Edit Banner' && <EditBanner/>
+          isOpenFullScreenPanel?.model ==='Edit Slider' && <EditHomeSlider/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Add Banner' && <AddBannersV1/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Edit Banner' && <EditBanners/>
         }
         
       </Dialog>

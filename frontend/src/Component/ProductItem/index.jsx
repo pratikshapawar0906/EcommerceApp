@@ -60,7 +60,7 @@ const ProductItem = (props) => {
             </div>
         </div>
         <div className="info p-3 py-5 ">
-           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.name}</Link></h6>
+           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.name?.substr(0,40+'...')}</Link></h6>
            <h5 className='text-[17px] mb-1 text-[rgba(77, 173, 89, 0.1)]'> <Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.brand}</Link></h5>
 
            

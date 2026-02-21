@@ -17,6 +17,7 @@ import AdsBannerSliderV2 from '../../Component/AdsBannerSliderv2';
 import { fetchDataFromApi } from '../../utils/api';
 import { useContext } from 'react';
 import { MyContext } from '../../App';
+import ProductLoading from '../../Component/ProductLoading';
 
 
 const Home = () => {
@@ -30,7 +31,7 @@ const Home = () => {
    
       
    useEffect(()=>{
-      fetchDataFromApi('/api/BannerSlider/get').then((res)=>{
+      fetchDataFromApi('/api/homeSlider/get').then((res)=>{
         setHomeSlideData(res?.data)
       })
 
@@ -42,13 +43,23 @@ const Home = () => {
         setAllFeturedProducts(res?.product)
       })
 
-      fetchDataFromApi(`/api/product/getProdByCatId/${Context?.catData[0]?._id}`).then((res)=>{
-       if(res?.success){
-          setPopularProductData(res?.data)
-       }
-      })
+      
 
    },[])
+
+   useEffect(() => {
+      if (Context?.catData?.length > 0) {
+        const firstCatId = Context.catData[0]._id;
+    
+        fetchDataFromApi(`/api/product/getProdByCatId/${firstCatId}`)
+          .then((res) => {
+            if (res?.success) {
+              setPopularProductData(res.data);
+              setValue(0); 
+            }
+          });
+      }
+    }, [Context?.catData]);
    
 
   const handleChange = (event, newValue) => {
@@ -56,6 +67,7 @@ const Home = () => {
   };
 
   const filterByCatId=(id)=>{
+     setPopularProductData([])
      fetchDataFromApi(`/api/product/getProdByCatId/${id}`).then((res)=>{
        if(res?.success){
           setPopularProductData(res?.data)
@@ -96,7 +108,7 @@ const Home = () => {
                   aria-label="scrollable auto tabs example"
                 >
                   {
-                   Context?.catData?.length !==0 && Context?.catData?.map((item,index)=>{
+                   Context?.catData?.map((item,index)=>{
                       return(
                         <Tab label={item?.name}
                         onClick={()=>filterByCatId(item?._id)}
@@ -108,6 +120,9 @@ const Home = () => {
               
             </div>
           </div>
+           {
+            popularProductData?.length === 0 && <ProductLoading/>
+            }
 
         {
         popularProductData?.length !==0 &&  <ProductSlider  items={6} data={popularProductData}/>
@@ -143,6 +158,9 @@ const Home = () => {
       <section className='py-5 pt-0 bg-white'>
           <div className="container">
             <h2 className='text-[20px] font-[600]'>Latest Products</h2>
+             {
+              allProducts?.length ===0 && <ProductLoading/>
+             }
             {
               allProducts?.length !==0 &&   <ProductSlider  items={6} data={allProducts}/>
             }
@@ -155,6 +173,9 @@ const Home = () => {
       <section className='py-5 pt-0 bg-white'>
           <div className="container">
             <h2 className='text-[20px] font-[600]'>Featured Products</h2>
+            {
+              allFeturedProducts?.length ===0 && <ProductLoading/>
+             }
              
             {
               allFeturedProducts?.length !==0 &&   <ProductSlider  items={6} data={allFeturedProducts}/>

@@ -6,9 +6,9 @@ import UploadBox from '../../Component/UploadBox'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import { MyContext } from '../../App'
-import { deleteData, editData, fetchDataFromApi, postData } from '../../utils/api'
+import { deleteData, editData, fetchDataFromApi,  } from '../../utils/api'
 
-const EditBanner = () => {
+const EditHomeSlider = () => {
     const [preview,setPreview]=useState([])
    const[isLoading,setIsLoading]=useState(false);
    const Context=useContext(MyContext)
@@ -21,8 +21,8 @@ const EditBanner = () => {
   const id=Context?.isOpenFullScreenPanel?.id;
   
     useEffect(()=>{
-      fetchDataFromApi(`/api/BannerSlider/${id}`).then((res)=>{
-            setPreview(res?.banner?.images)
+      fetchDataFromApi(`/api/homeSlider/${id}`).then((res)=>{
+            setPreview(res?.HomeSlider?.images)
         })
     },[Context?.isOpenFullScreenPanel])
 
@@ -38,7 +38,7 @@ const EditBanner = () => {
   const removeImage=(image,index)=>{
     var imageArr=[];
     imageArr=preview;
-    deleteData(`/api/BannerSlider/deleteImageSlider?img=${image}`).then((res)=>{
+    deleteData(`/api/homeSlider/deleteImageSlider?img=${image}`).then((res)=>{
         imageArr.splice(index,1);
         setPreview([]);
         setTimeout(()=>{
@@ -63,7 +63,7 @@ const EditBanner = () => {
               return  false
           }
 
-          editData(`/api/BannerSlider/updateHomeSlider/${id}`,formField).then((res)=>{
+          editData(`/api/homeSlider/updateHomeSlider/${id}`,formField).then((res)=>{
             if(res?.success){
                Context.alertBox( "success",  res?.message || "Upload Banner successful!" );
                setTimeout(()=>{
@@ -111,7 +111,7 @@ const EditBanner = () => {
                     
 
                    
-                    <UploadBox  multiple={true} name="Banner" url="/api/BannerSlider/uploadHomeSlider" setPreviewFun={setPreviewFun}/>
+                    <UploadBox  multiple={true} name="HomeSlider" url="/api/homeSlider/uploadHomeSlider" setPreviewFun={setPreviewFun}/>
                 </div>
             </div>
             <br/>
@@ -135,4 +135,4 @@ const EditBanner = () => {
   )
 }
 
-export default EditBanner
+export default EditHomeSlider

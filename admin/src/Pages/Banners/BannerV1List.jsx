@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableBody from '@mui/material/TableBody'
 import Checkbox from '@mui/material/Checkbox';
 import { FiEdit3 } from 'react-icons/fi'
-import { FaRegEye, FaTrash } from 'react-icons/fa6'
+import {  FaTrash } from 'react-icons/fa6'
 import { Link } from 'react-router-dom';
 import { MyContext } from '../../App'
 import { deleteData, fetchDataFromApi } from '../../utils/api'
@@ -23,48 +23,51 @@ const columns = [
 ];
 
 const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
-const HomeSliderBanner = () => {
+
+const BannerV1List = () => {
+
     const [images, setImages] = useState([]);
-        const Context=useContext(MyContext)
-
-        useEffect(()=>{
-           fetchDataFromApi("/api/homeSlider/get").then((res)=>{
-             setImages(res?.data)
-           })
-        },[Context?.isOpenFullScreenPanel])
+            const Context=useContext(MyContext)
+            
     
+            useEffect(()=>{
+               fetchDataFromApi("/api/banner/get").then((res)=>{
+                 setImages(res?.data)
+               })
+            },[Context?.isOpenFullScreenPanel])
         
+            
+            
         
+            const [page, setPage] = useState(0);
+            const [rowsPerPage, setRowsPerPage] = useState(10);
+        
+            const handleChangePage = (event, newPage) => {
+              setPage(newPage);
+            };
+        
+            const handleChangeRowsPerPage = (event) => {
+              setRowsPerPage(+event.target.value);
+              setPage(0);
+            };
     
-        const [page, setPage] = useState(0);
-        const [rowsPerPage, setRowsPerPage] = useState(10);
-    
-        const handleChangePage = (event, newPage) => {
-          setPage(newPage);
-        };
-    
-        const handleChangeRowsPerPage = (event) => {
-          setRowsPerPage(+event.target.value);
-          setPage(0);
-        };
-
-        const deleteBannerImage=(id)=>{
-             deleteData(`/api/homeSlider/deleteImageSlider/${id}`).then((res)=>{
-                 fetchDataFromApi("/api/homeSlider/get").then((res)=>{
-                   setImages(res?.data || [])
+            const deleteBannerImage=(id)=>{
+                 deleteData(`/api/banner/deleteImageSlider/${id}`).then((res)=>{
+                     fetchDataFromApi("/api/banner/get").then((res)=>{
+                       setImages(res?.data || []);
+                     })
                  })
-             })
-        }
+            }
   return (
     <>
-       <div className="flex items-center justify-between px-2 py-0 mt-3">
-        <h2 className="text-[18px] font-[700]">Home Slider Banners <span className='font-[400] text-[14px]'> ( Material UI Table)</span></h2>
+      <div className="flex items-center justify-between px-2 py-0 mt-3">
+        <h2 className="text-[18px] font-[700]"> Banners Sliders <span className='font-[400] text-[14px]'> </span></h2>
         <div className="col w-[25%] ml-auto flex items-center justify-end gap-3">
             <Button className='btn-blue !bg-green-500 btn-sm '>Export</Button>
             <Button className='btn-blue btn-sm !text-white' onClick={()=>Context.setIsOpenFullScreenPanel({
                 open:true,
-                model:'Add Home Slider'
-            })}>Add Home  Slide</Button>
+                model:'Add Banner'
+            })}>Add Banner Slide</Button>
         </div>
        </div>
 
@@ -97,7 +100,7 @@ const HomeSliderBanner = () => {
            <TableBody>
             {
                     images?.length !== 0 && images.map((item) =>
-                       Array.isArray(item.images) &&
+                         Array.isArray(item.images) &&
                        item.images.map((img, imgIndex) => (
 
                         <TableRow key={`${item._id}-${imgIndex}`}>
@@ -124,7 +127,7 @@ const HomeSliderBanner = () => {
                             <Button className='!w-[35px] !h-[35px]  bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.1)] !rounded-full hover:!bg-[#f1f1f1]' style={{minWidth:'35px'}}
                             onClick={()=>Context.setIsOpenFullScreenPanel({
                                 open:true,
-                                model:'Edit Slider',
+                                model:'Edit Banner',
                                 id:item?._id
                             })}>
                                  <FiEdit3 className='text-[rgba(0,0,0,0.7)] text-[20px] '/>
@@ -167,4 +170,4 @@ const HomeSliderBanner = () => {
   )
 }
 
-export default HomeSliderBanner
+export default BannerV1List

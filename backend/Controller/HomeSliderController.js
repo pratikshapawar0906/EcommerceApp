@@ -1,6 +1,6 @@
 import cloudinary from "../middleware/cloudinary.js";
 import fs from 'fs'
-import Banner from "../model/BannerSchema.js";
+import HomeSlider from "../model/HomeSliderSchema.js";
 
 var imagesArr=[];
 
@@ -57,42 +57,35 @@ export const uploadImagesController = async (req, res) => {
   }
 }
 
-export const createBannerController = async (req, res) => {
+export const createHomeSliderController = async (req, res) => {
    try {
       
 
-     let banner=new Banner({
-       bannerTitle: req.body.bannerTitle, 
+     let homeSlider=new HomeSlider({
         images:imagesArr,
-        catId:req.body.catId,
-        subCatId:req.body.subCatId,
-        thridCatId:req.body.thridCatId,
-        price:req.body.price,
-
-        
      })
      
-     if(!banner){
+     if(!homeSlider){
         return  res.status(400).json({
-            message:"Banner not created",
+            message:"HomeSlider not created",
             error:true,
             success:false
         })
      }
 
-     banner = await banner.save();
+     homeSlider = await homeSlider.save();
    
      imagesArr=[];
 
     return  res.status(200).json({
-        message:"Banner Created",
+        message:"HomeSlider Created",
        success: true,
        error:false,
-       data:banner
+      HomeSlider:homeSlider
     });
 
   } catch (error) {
-    console.error("Banner Error:", error);
+    console.error("HomeSlider Error:", error);
     res.status(500).json({
         success: false,
         message: error.message || error,
@@ -100,8 +93,6 @@ export const createBannerController = async (req, res) => {
     });
   }
 }
-
-
 export const removeImageFromCloudinary = async (req, res) => {
   try {
     
@@ -137,24 +128,24 @@ export const removeImageFromCloudinary = async (req, res) => {
 }
 
 
-export const getSingleBannerController = async (req, res) => {
+export const getSingleHomeSliderController = async (req, res) => {
     try {
 
-        const  banner= await Banner.findById(req.params.id)
+        const  homeSlider= await HomeSlider.findById(req.params.id)
 
-        if(!banner){
+        if(!homeSlider){
             return res.status(400).json({
-                message:"Banner not found",
+                message:"HomeSlider not found",
                 success:false,
                 error:true
             })
         }
 
         return  res.status(200).json({
-          message:"Getting Banner Successfully",
+          message:"Getting HomeSlider Successfully",
           success: true,
           error:false,
-          data:banner
+          HomeSlider:homeSlider
         });
         
     } catch (error) {
@@ -165,16 +156,16 @@ export const getSingleBannerController = async (req, res) => {
         });
     }
 }
-export const getAllBannerController = async (req, res) => {
+export const getAllHomeSliderController = async (req, res) => {
   try {
-       
-        const banner=await Banner.find({
-          
+    // const userId=req.userId;    
+        const homeSlider=await HomeSlider.find({
+            // userId:userId,
         }) 
     
-        if(!banner){
+        if(!homeSlider){
             return res.status(404).json({
-                message:"Imges not found in Banner",
+                message:"Imges not found in HomeSlider",
                 error:true,
                 success: false,
             })
@@ -182,14 +173,14 @@ export const getAllBannerController = async (req, res) => {
 
 
     return  res.status(200).json({
-      message:"Getting Banner Successfully",
+      message:"Getting HomeSlider Successfully",
       success: true,
       error:false,
-      data:banner
+      data:homeSlider
     });
     
   } catch (error) {
-      console.error("Banner Error:", error);
+      console.error("HomeSlider Error:", error);
     res.status(500).json({
         success: false,
         message: error.message || error,
@@ -197,25 +188,20 @@ export const getAllBannerController = async (req, res) => {
     });
   }
 }
-export const updateBannerController = async (req, res) => {
+export const updateHomeSliderController = async (req, res) => {
     try {
 
-        const banner=await  Banner.findByIdAndUpdate(
+        const homeSlider=await  HomeSlider.findByIdAndUpdate(
             req.params.id,
             {
                images:imagesArr.length > 0 ?  imagesArr[0] :req.body.imagesArr,
-               catId:req.body.catId,
-               bannerTitle: req.body.bannerTitle, 
-               subCatId:req.body.subCatId,
-               thridCatId:req.body.thridCatId,
-               price:req.body.price,
             },
             {new :true}
         )   
      
-        if(!banner){
+        if(!homeSlider){
            return  res.status(400).json({
-               message:"Banner not found",
+               message:"HomeSlider not found",
                error:true,
                success:false
            })
@@ -224,10 +210,10 @@ export const updateBannerController = async (req, res) => {
         imagesArr=[];
 
         return  res.status(200).json({
-          message:" Banner Updated Successfully",
+          message:" HomeSlider Updated Successfully",
           success: true,
           error:false,
-          data:banner,
+          HomeSlider:homeSlider,
         });
      
     } catch (error) {
@@ -239,12 +225,12 @@ export const updateBannerController = async (req, res) => {
     }
 }
 
-export const deleteBannerController = async (req, res) => {
+export const deleteHomeSliderController = async (req, res) => {
     try {
       
-        const banner=await Banner.findById(req.params.id);
+        const homeSlider=await HomeSlider.findById(req.params.id);
 
-        if(!banner){
+        if(!homeSlider){
            return res.status(404).json({
            success: false,
            error: true,
@@ -253,7 +239,7 @@ export const deleteBannerController = async (req, res) => {
           
         }
 
-        const images=banner.images;
+        const images=homeSlider.images;
 
         for(const img of images){
              const imgUrl=img;
@@ -268,18 +254,18 @@ export const deleteBannerController = async (req, res) => {
 
       
 
-         const deletedCat=await Banner.findByIdAndDelete(req.params.id);
+         const deletedCat=await HomeSlider.findByIdAndDelete(req.params.id);
 
          if(!deletedCat){
             res.status(400).json({
-               message:" Banner not found",
+               message:" HomeSlider not found",
                success: false,
                error: true,
             })
          }
 
         return  res.status(200).json({
-          message:" Banner Delete Successfully",
+          message:" HomeSlider Delete Successfully",
           success: true,
           error:false,
           

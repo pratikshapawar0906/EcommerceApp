@@ -2,11 +2,41 @@ import mongoose from "mongoose";
 
 
 const BannerSchema=new mongoose.Schema({
-     images:[
+    bannerTitle:{
+      type:String,
+      default:'',
+      require:true
+    },
+    catId:{
+      type:String,
+      default:'',
+      require:true
+    },
+    subCatId:{
+      type:String,
+      default:'',
+      require:true
+    },
+    thridCatId:{
+      type:String,
+      default:'',
+      require:true
+    },
+    price:{
+      type:Number,
+      default:''
+    },
+    // align:{
+    //   type:number,
+    //   default:''
+    // },
+    images:[
       {
         type: String,
       }
     ],
+    
+    
 },{
      timestamps: true,
 })
