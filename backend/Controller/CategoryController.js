@@ -102,40 +102,54 @@ export const createCategoryController = async (req, res) => {
 
 export const getAllCategoryController = async (req, res) => {
   try {
+    const categories = await Category.find();
+    const categoryMap = {};
 
-    const categorie= await Category.find();
-    const categoryMap={};
-
-    categorie.forEach(cat=>{
-        categoryMap[cat._id]={...cat._doc,children:[]};
-    })
-
-    const rootCategories=[];
-     categorie.forEach(cat=>{
-       if(cat.parentId){
-        categoryMap[cat.parentId].children.push(categoryMap[cat._id]);
-       }else{
-        rootCategories.push(categoryMap[cat._id])
-       }
-     });
-
-
-    return  res.status(200).json({
-      message:"Getting Category Successfully",
-      success: true,
-      error:false,
-      data:rootCategories
+    // Step 1: Create map
+    categories.forEach(cat => {
+      categoryMap[cat._id.toString()] = {
+        ...cat._doc,
+        children: []
+      };
     });
-    
+
+    const rootCategories = [];
+
+    // Step 2: Build tree safely
+    categories.forEach(cat => {
+      if (cat.parentId) {
+        const parentId = cat.parentId.toString();
+
+        if (categoryMap[parentId]) {
+          categoryMap[parentId].children.push(
+            categoryMap[cat._id.toString()]
+          );
+        } else {
+          // parent not found → treat as root
+          rootCategories.push(categoryMap[cat._id.toString()]);
+        }
+      } else {
+        rootCategories.push(categoryMap[cat._id.toString()]);
+      }
+    });
+
+    return res.status(200).json({
+      message: "Getting Category Successfully",
+      success: true,
+      error: false,
+      data: rootCategories
+    });
+
   } catch (error) {
-      console.error("Category Error:", error);
+    console.error("Category Error:", error);
     res.status(500).json({
-        success: false,
-        message: error.message || error,
-        error:true,
+      success: false,
+      message: error.message || error,
+      error: true,
     });
   }
-}
+};
+
 
 export const getCategoriesController = async (req, res) => {
     try {

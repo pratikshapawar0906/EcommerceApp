@@ -7,7 +7,7 @@ import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules';
 
 
-const ProductZoom = () => {
+const ProductZoom = (props) => {
   const [slideIndex, setSlideIndex]=useState(0);
 
   const ZoomSliderBig =useRef();
@@ -31,24 +31,20 @@ const ProductZoom = () => {
                slidesPerView={3}
                className='ZoomProductSliderThumbs h-[500px] overflow-hidden'
             >
-                <SwiperSlide>
-                    <div className={`item rounded-md overflow-hidden cursor-pointer group 
-                      ${slideIndex === 0 ? 'opacity-30' : 'opacity-60'}`} onClick={()=>goto(0)}>
-                        <img src="../Img/Shirt1.jpg" className='w-full transition-all group-hover:scale-105'/>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className={`item rounded-md overflow-hidden cursor-pointer group 
-                      ${slideIndex === 2 ? 'opacity-30' : 'opacity-60'}`}  onClick={()=>goto(1)}>
-                        <img src="../Img/Shirt2.jpg" className='w-full transition-all group-hover:scale-105'/>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className={`item rounded-md overflow-hidden cursor-pointer group 
-                      ${slideIndex === 3 ? 'opacity-30' : 'opacity-60'}`}  onClick={()=>goto(2)}>
-                        <img src="../Img/Shirt3.jpg" className='w-full transition-all group-hover:scale-105'/>
-                    </div>
-                </SwiperSlide>
+              {
+                props?.images?.map((item,index)=>{
+                    return(
+                         <SwiperSlide key={index}>
+                            <div className={`item rounded-md overflow-hidden cursor-pointer group 
+                              ${slideIndex === index ? 'opacity-30' : 'opacity-60'}`} onClick={()=>goto(index)}>
+                                <img src={item} className='w-full transition-all group-hover:scale-105'/>
+                            </div>
+                        </SwiperSlide>
+                    )
+                })
+              }
+               
+               
             </Swiper>
         </div>
        <div className="zoomContainer w-[85%] h-[500px] overflow-hidden">
@@ -58,17 +54,19 @@ const ProductZoom = () => {
            spaceBetween={0}
            slidesPerView={1}
         >
-          <SwiperSlide>
-             <InnerImageZoom zoomType="hover" zoomScale={1} src="../Img/Shirt1.jpg"  />
-         </SwiperSlide>
+          {
+            props?.images?.map((item,index)=>{
+                return(
 
-         <SwiperSlide>
-             <InnerImageZoom zoomType="hover" zoomScale={1} src="../Img/Shirt2.jpg"  />
-         </SwiperSlide>
+                   <SwiperSlide key={index}>
+                      <InnerImageZoom zoomType="hover" zoomScale={1} src={item}  />
+                  </SwiperSlide>
 
-         <SwiperSlide>
-             <InnerImageZoom zoomType="hover" zoomScale={1} src="../Img/Shirt3.jpg"  />
-         </SwiperSlide>
+          )})
+        }
+         
+
+        
         </Swiper>
        </div>
       </div>

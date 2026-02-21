@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import './App.css'
 import Header from './Component/Header'
 import Home from './pages/Home'
-import { BrowserRouter as  Router, Route, Routes, Link } from 'react-router-dom'
+import { BrowserRouter as  Router, Route, Routes} from 'react-router-dom'
 import ProductListing from './pages/ProductListing'
 import Footer from './Component/Footer';
 import ProductDetails from './pages/ProductDetails'
@@ -29,17 +29,30 @@ import AddAddress from './pages/MyAccount/AddAddress'
 const MyContext = createContext();
 const App = () => {
 
-  const [openProductDetailsModel, setOpenProductDetailsModel] = useState(false);
+  const [openProductDetailsModel, setOpenProductDetailsModel] = useState({
+    open:false,
+    item:{}
+  });
   const [maxWidth, setMaxWidth] = useState('lg');
   const [fullWidth, setFullWidth] = useState(true);
   const [openCartPanel, setOpenCartPanel] =useState(false);
   const[isLogin, setIsLogin]=useState(false)
   const [userData,setUserData]=useState(null)
   const[address ,setAddress]=useState([])
+  const[catData,setCatData]=useState([])
 
+   const handleOpenProductDetailsModel = (status,item) => {
+      setOpenProductDetailsModel({
+      open:true,
+      item:item
+    });
+   }
 
   const handleCloseProductDetailsModel = () => {
-    setOpenProductDetailsModel(false);
+    setOpenProductDetailsModel({
+      open:false,
+      item:{}
+    });
   };
 
   const toggleCartPanel = (newOpen) => () => {
@@ -54,26 +67,36 @@ const App = () => {
     return;
   }
  
-  if(token !== undefined && token !== null && token !== ""){
-    setIsLogin(true);
-    fetchDataFromApi(`/api/user/userDetails?token=${token}`).then((res)=>{
-      setUserData(res.data);
-      if(res.response?.data.error===true){
-        if(res.response?.data.message==="You have not login"){
-          localStorage.setItem("accesstoken",res?.data?.accesstoken);
-          localStorage.setItem("refreshtoken",res?.data?.refreshtoken);
-          alertBox("error","Your session is Closed Please Login Again")
-         
-          window.location.href="/login"
-        }
+  fetchDataFromApi(`/api/user/userDetails`)
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch(error => {
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        forceLogout("Session expired. Please login again.");
       }
-    })
-  }else{
-    setIsLogin(false)
-  }
+    });
+  
+  }, []);
 
-}, [isLogin]);
+    useEffect(()=>{
+       fetchDataFromApi("/api/category").then((res)=>{
+          setCatData(res?.data);
+       })
+    },[])
 
+
+    const forceLogout = (message) => {
+    localStorage.removeItem("accesstoken");
+    localStorage.removeItem("refreshtoken");
+  
+    setIsLogin(false);
+    setUserData(null);
+  
+    alertBox("error", message);
+  
+    window.location.href = "/login";
+  };
 
   const alertBox=(type,msg)=>{
     if(type==="success"){
@@ -95,7 +118,10 @@ const App = () => {
     alertBox,
     userData,
     setUserData,
-    setAddress
+    setAddress,
+    catData,
+    setCatData,
+    handleOpenProductDetailsModel
     
   }
   return (
@@ -125,8 +151,8 @@ const App = () => {
 
       <Toaster/>
       <Dialog
-        open={openProductDetailsModel}
-        onClose={handleCloseProductDetailsModel}
+        open={openProductDetailsModel.open}
+        onClose={()=>handleCloseProductDetailsModel}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         className='productDetailModel'
@@ -135,17 +161,24 @@ const App = () => {
       >
         
         <DialogContent>
-          <div className="flex items-center w-full productDetails relative">
+          <div className="flex items-center w-full productDetailsModel relative">
             <Button className='!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !text-[#000]
-            !absolute top-[15px] right-[15px] !bg-[#f1f1f1]' onClick={handleCloseProductDetailsModel}>
+            !absolute top-[15px] right-[15px] !bg-[#f1f1f1]' onClick={()=>handleCloseProductDetailsModel}>
               <IoMdClose className='text-[20px]'/></Button>
-            <div className="col1 w-[40%]">
-              <ProductZoom/>
-            </div>
-
-            <div className="col2 w-[60%] py-8 px-8 pr-16 productContent">
-              <ProductDetailsModel/>
-            </div>
+              {
+                openProductDetailsModel?.item?.length !==0 &&  
+                <>
+                <div className="col1 w-[40%]">
+                  <ProductZoom images={openProductDetailsModel?.item?.images}/>
+                </div>
+    
+                <div className="col2 w-[60%] py-8 px-8 pr-16 productContent">
+                  <ProductDetailsModel  item={openProductDetailsModel?.item}/>
+                </div>
+                </>
+                
+              }
+            
           </div>
         </DialogContent>
         

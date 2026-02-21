@@ -5,70 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const categories = [
-  {
-    name: 'Fashion',
-    img: '../Img/Fashion.png',
-    slug: 'fashion',
-  },
-  {
-    name: 'Electronics',
-    img: '../Img/Electronic.png',
-    slug: 'electronics',
-  },
-  {
-    name: 'Bags',
-    img: '../Img/Bags.png',
-    slug: 'bags',
-  },
-  {
-    name: 'Footwear',
-    img: '../Img/Footwear.png',
-    slug: 'footwear',
-  },
-  {
-    name: 'Groceries',
-    img: '../Img/Groceries.png',
-    slug: 'groceries',
-  },
-  {
-    name: 'Beauty',
-    img: '../Img/Beauty.png',
-    slug: 'beauty',
-  },
-  {
-    name: 'Wellness',
-    img: '../Img/Wellness.png',
-    slug: 'wellness',
-  },
-  {
-    name: 'Jewellery',
-    img: '../Img/Jewellery.png',
-    slug: 'jewellery',
-  },
-]
-
-const Catslider = () => {
-
-  // const id=Context?.isOpenFullScreenPanel?.id;
-
-  // useEffect(()=>{
-  //   fetchDataFromApi(`/api/category/${id}`).then((res)=>{
-  //       console.log(res?.category)
-  //          formField.name=res?.category?.name
-  //          setPreview(res?.category?.images)
-  //     })
-  // },[])
-
-  // const onChangeInput=(e)=>{
-  //  const {name, value}=e.target
-  //   setfromField(()=>{
-  //     return{
-  //      ...formField,
-  //      [name]: value
-  //     }
-  //   })
-  // }
+const Catslider = (props) => {
 
   return (
     <div className="homeCatslider py-8 pt-4">
@@ -85,7 +22,7 @@ const Catslider = () => {
             1280: { slidesPerView: 7 },
           }}
         >
-          {categories.map((cat, index) => (
+          { props?.data?.map((cat, index) => (
             <SwiperSlide key={index}>
               <Link to={`/category/${cat.slug}`}>
                 <div
@@ -94,12 +31,12 @@ const Catslider = () => {
                   hover:shadow-lg transition-all duration-300"
                 >
                   <img
-                    src={cat.img}
+                    src={cat.images[0]}
                     alt={cat.name}
                     className="w-[60px] mb-2 transition-transform duration-300 hover:scale-110"
                   />
                   <h3 className="text-[15px] font-medium mt-2">
-                    {cat.name}
+                    {cat?.name}
                   </h3>
                 </div>
               </Link>

@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableBody from '@mui/material/TableBody'
 import Checkbox from '@mui/material/Checkbox';
 import { FiEdit3 } from 'react-icons/fi'
-import { FaRegEye, FaTrash } from 'react-icons/fa6'
+import { FaTrash } from 'react-icons/fa6'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { Link } from 'react-router-dom';

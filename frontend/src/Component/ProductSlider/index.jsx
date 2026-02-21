@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Autoplay,Navigation } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import ProductItem from '../ProductItem';
 
 const ProductSlider = (props) => {
@@ -18,33 +18,17 @@ const ProductSlider = (props) => {
               slidesPerView={props.items}
               className='mySwiper'
             >
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductItem/>
-              </SwiperSlide>
+              {
+                props?.data?.map((item, index)=>{
+                     return(
+                        <SwiperSlide key={index}>
+                           <ProductItem item={item} />
+                         </SwiperSlide>
+                     )
+                })
+                
+              }
+              
             </Swiper>
           </div>
       </section>

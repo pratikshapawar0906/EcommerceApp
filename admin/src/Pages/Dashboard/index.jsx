@@ -88,7 +88,7 @@ const Dashboard = () => {
   const [categoryThridSubFilter, setCategoryThridSubFilter] = useState('');
   const Context=useContext(MyContext)
 
-  useEffect(() => {
+    useEffect(() => {
       setIsLoading(true)
       fetchDataFromApi("/api/product/getAllProducts").then((res) => {
          setTimeout(()=>{

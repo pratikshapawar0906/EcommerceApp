@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import { MyContext } from '../../App'
 import { deleteData, postData } from '../../utils/api'
+// import useNavigate from 'react-router-dom'
 
 const AddHomeSlider = () => {
   const [preview,setPreview]=useState([])
@@ -17,16 +18,8 @@ const AddHomeSlider = () => {
     images:[],  
   })
 
-  // const onChangeInput=(e)=>{
-  //  const {name, value}=e.target
-  //   setfromField(()=>{
-  //     return{
-  //      ...formField,
-  //      [name]: value
-  //     }
-  //   })
-  // }
 
+  // const history=useNavigate()
   const setPreviewFun=(previewArr)=>{
     setPreview((prev) => [...prev, ...previewArr]);
 
@@ -73,7 +66,9 @@ const AddHomeSlider = () => {
                     open:false,
                 })
                 Context?.getCat();
+                // history("/homeSlider/list")
                },1500)
+
               
             } else {
                Context.alertBox( "error", res?.message || "Something went wrong!" );

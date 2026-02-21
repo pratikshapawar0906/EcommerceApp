@@ -224,3 +224,58 @@ export const updateHomeSliderController = async (req, res) => {
         }); 
     }
 }
+
+export const deleteBannerController = async (req, res) => {
+    try {
+      
+        const banner=await Banner.findById(req.params.id);
+
+        if(!banner){
+           return res.status(404).json({
+           success: false,
+           error: true,
+           message: "Category not found",
+      });
+          
+        }
+
+        const images=banner.images;
+
+        for(const img of images){
+             const imgUrl=img;
+             const urlArr=imgUrl.split("/"); 
+             const image =urlArr[urlArr.length -1];
+             const imageName=image.split(".")[0];     
+             
+            if(imageName){
+               await cloudinary.uploader.destroy(imageName);
+            }
+        }
+
+      
+
+         const deletedCat=await Banner.findByIdAndDelete(req.params.id);
+
+         if(!deletedCat){
+            res.status(400).json({
+               message:" banner not found",
+               success: false,
+               error: true,
+            })
+         }
+
+        return  res.status(200).json({
+          message:" Banner Delete Successfully",
+          success: true,
+          error:false,
+          
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message || error,
+            error:true,
+        }); 
+    }
+}

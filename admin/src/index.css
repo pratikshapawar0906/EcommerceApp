@@ -147,6 +147,8 @@ input[type=number]::-webkit-outer-spin-button{
   color: #000 !important;
 }
 
+
+
 .swiper-button-prev::after,.swiper-button-next::after{
   font-size: 22px !important;
   color: #000 ;

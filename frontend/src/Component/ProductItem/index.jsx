@@ -10,7 +10,7 @@ import { FaShareFromSquare } from "react-icons/fa6";
 import { MyContext } from '../../App';
 
 
-const ProductItem = () => {
+const ProductItem = (props) => {
 
   const Context=useContext( MyContext)
   
@@ -21,13 +21,13 @@ const ProductItem = () => {
         <div className="group imgWrapper w-[100%]  rounded-md relative">
 
           
-            <Link to='/'>
+            <Link to={`/productDetails/${props?.item?._id}`}>
                <div className="img h-[220px] overflow-hidden">
  
-                 <img  src='../Img/Shirt1.jpg'
+                 <img  src={props?.item?.images[0]}
                   className=' w-full '/>
 
-                 <img  src='../Img/Shirt2.jpg'
+                 <img  src={props?.item?.images[1]}
                  className=' w-full transition-all duration-700 absolute top-0 left-0 opacity-0 group-hover:opacity-100'/>
                </div>
             </Link>
@@ -35,7 +35,7 @@ const ProductItem = () => {
 
 
             <span className='discount flex items-center absolute top-[10px] left-[10px] z-50
-            bg-[#ff5252] text-white rounded-lg p-1 text-[12px] font-[500]'> 10%</span>
+            bg-[#ff5252] text-white rounded-lg p-1 text-[12px] font-[500]'> {props?.item?.discount}</span>
 
             <div className="actions absolute top-[-200px] right-[5px] z-50 flex items-center gap-2 
             flex-col w-[50px] transition-all duration-300 group-hover:top-[15px] opacity-0 group-hover:opacity-100">
@@ -50,7 +50,7 @@ const ProductItem = () => {
               </Button>
 
               <Button sx={{  minWidth: 30,  width: 30,  height: 30,  borderRadius: '50%',  backgroundColor: '#fff',  color: '#000',  '&:hover': {    backgroundColor: '#ff5252',    color: '#fff',  },}}
-               onClick={()=>Context.setOpenProductDetailsModel(true)}>
+               onClick={()=>Context.handleOpenProductDetailsModel(true, props?.item)}>
                 <MdOutlineZoomOutMap className='text-[18px] '/>
               </Button>
 
@@ -60,15 +60,15 @@ const ProductItem = () => {
             </div>
         </div>
         <div className="info p-3 py-5 ">
-           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to='' className='link transition-all'>Men Alias-N Regular Fit Spread collar Shirt</Link></h6>
-           <h5 className='text-[17px] mb-1 text-[rgba(77, 173, 89, 0.1)]'> <Link to='' className='link transition-all'>In Stocks</Link></h5>
+           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.name}</Link></h6>
+           <h5 className='text-[17px] mb-1 text-[rgba(77, 173, 89, 0.1)]'> <Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.brand}</Link></h5>
 
            
-           <Rating name="size-small" defaultValue={4} size="small" readOnly />
+           <Rating name="size-small" defaultValue={props?.item?.rating} size="small" readOnly />
 
            <div className="flex items-center gap-4">
-            <span className='OldPrice line-through text-gray-500 text-[15px] font-[500]'>$58.00</span>
-             <span className='Price text-[#ff5252] text-[15px] font-[600]'>$58.00</span>
+            <span className='OldPrice line-through text-gray-500 text-[15px] font-[500]'>&#x20b9;{props?.item?.oldPrice}</span>
+             <span className='Price text-[#ff5252] text-[15px] font-[600]'>&#x20b9;{props?.item?.price}</span>
            </div>
 
 

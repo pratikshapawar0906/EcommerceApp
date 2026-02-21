@@ -17,7 +17,10 @@ const CategoryPanel = (props) => {
         className='cursor-pointer text-[20px]'/>
       </h3>
 
-      <CategoryCollapse/>
+      {
+        props?.data?.length !==0 &&   <CategoryCollapse data={props?.data}/>
+      }
+      
 
       
     </Box>
