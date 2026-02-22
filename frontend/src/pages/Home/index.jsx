@@ -26,6 +26,7 @@ const Home = () => {
    const[popularProductData,setPopularProductData]=useState([]);
    const[allProducts,setAllProducts]=useState([]);
    const[allFeturedProducts,setAllFeturedProducts]=useState([]);
+   const[allBlogData,setAllBlogData]=useState([]);
    const [bannerData,setBannerData]=useState([]);
        const Context=useContext(MyContext)
    
@@ -33,6 +34,10 @@ const Home = () => {
    useEffect(()=>{
       fetchDataFromApi('/api/homeSlider/get').then((res)=>{
         setHomeSlideData(res?.data)
+      })
+
+      fetchDataFromApi('/api/blog/get').then((res)=>{
+        setAllBlogData(res?.data)
       })
 
       fetchDataFromApi('/api/banner/get').then((res)=>{
@@ -190,7 +195,9 @@ const Home = () => {
              <AdsBannerSlider items={3}/>
           </div>
       </section>
-
+     
+     {
+        allBlogData?.length !==0 && 
       <section className='py-5 pb-8 pt-0 bg-white blogSection'>
         <div className=" container ">
           <h2 className='text-[20px] font-[600] mb-4'>From the Blog</h2>
@@ -201,15 +208,20 @@ const Home = () => {
            slidesPerView={3}  
            className='blogSwiper'         
          >
-          <SwiperSlide><BlogItem/></SwiperSlide>
-          <SwiperSlide><BlogItem/></SwiperSlide>
-          <SwiperSlide><BlogItem/></SwiperSlide>
-          <SwiperSlide><BlogItem/></SwiperSlide>
-          <SwiperSlide><BlogItem/></SwiperSlide>
-          <SwiperSlide><BlogItem/></SwiperSlide>
+          {
+             allBlogData?.map((item,index)=>{
+              return(
+                <SwiperSlide key={index}>
+                  <BlogItem item={item}/>
+                </SwiperSlide>
+              )
+             })
+          }
+          
          </Swiper>
         </div>
       </section>
+     }
       <br/>
        
       

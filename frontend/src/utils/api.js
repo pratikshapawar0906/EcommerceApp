@@ -38,7 +38,7 @@ export const fetchDataFromApi = async (url) => {
     });
     return response.data;
   } catch (error) {
-    return { success: false, message: "Server error" };
+    throw error;
   }
 };
 

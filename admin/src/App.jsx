@@ -40,6 +40,9 @@ import AddBannersV1 from './Pages/Banners/addBannersV1'
 import EditHomeSlider from './Pages/HomeSliderBanner/EditHomeSlider'
 import BannerV1List from './Pages/Banners/BannerV1List'
 import EditBanners from './Pages/Banners/EditBanners'
+import EditBlog from './Pages/Blog/EditBlog'
+import AddBlog from './Pages/Blog/AddBlog'
+import BlogList from './Pages/Blog/BlogList'
 
 
 
@@ -393,6 +396,26 @@ function App() {
         </>
       )
     },
+    {
+      path:"/blog/List",
+      exact:true,
+      element:(
+        <> 
+          <section className="main">
+          <Header/>
+           <div className="contentMain flex">
+             <div className='sidebarWrapper w-[18%]'>
+               <Sidebar/>
+             </div>
+
+             <div className={`contentRight !py-4 !px-5  ${isSidebarOpen === true ? 'w-[82%] ' :"w-[98%]"} transition-all`}>
+              <BlogList/>
+             </div>
+           </div>
+        </section>
+        </>
+      )
+    },
     
     
   ])
@@ -532,6 +555,12 @@ function App() {
         }
         {
           isOpenFullScreenPanel?.model ==='Edit Banner' && <EditBanners/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Add Blog' && <AddBlog/>
+        }
+        {
+          isOpenFullScreenPanel?.model ==='Edit Blog' && <EditBlog/>
         }
         
       </Dialog>

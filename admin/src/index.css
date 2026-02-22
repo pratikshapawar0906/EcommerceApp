@@ -165,3 +165,8 @@ input[type=number]::-webkit-outer-spin-button{
   font-size: 18px !important;
   color: #000 ;
 }
+
+.rsw-editor {
+  min-height: 250px !important;
+  background-color: #fff !important;
+}
