@@ -68,6 +68,7 @@ export const createBannerController = async (req, res) => {
         subCatId:req.body.subCatId,
         thridCatId:req.body.thridCatId,
         price:req.body.price,
+        align:req.body.align,
 
         
      })
@@ -209,6 +210,7 @@ export const updateBannerController = async (req, res) => {
                subCatId:req.body.subCatId,
                thridCatId:req.body.thridCatId,
                price:req.body.price,
+               align:req.body.align,
             },
             {new :true}
         )   

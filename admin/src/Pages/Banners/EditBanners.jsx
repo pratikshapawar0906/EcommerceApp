@@ -32,7 +32,7 @@ const EditBanners = () => {
         const [align,setAlign]=useState('')
         const [preview,setPreview]=useState([])
         const[isLoading,setIsLoading]=useState(false);
-        const[banner,setBanner]=useState('')
+        
         
          
         const id=Context?.isOpenFullScreenPanel?.id;
@@ -47,11 +47,14 @@ const EditBanners = () => {
                 thridCatId:banner.thridCatId,
                 price:banner.price,
                 bannerTitle:banner.bannerTitle
+                
             })
                 setPreview(banner.images);
                 setProductCat(banner.catId);
                 setProductSubCat(banner.subCatId);
                 setProductThridSubCat(banner.thridCatId);
+                setAlign(banner.align)
+                formField.align=banner.align
             })
         },[Context?.isOpenFullScreenPanel])
          const onChangeInput=(e)=>{
@@ -125,6 +128,10 @@ const EditBanners = () => {
           }));
         };
         
+         const handleChangeAlign=(event)=>{
+       setAlign(event.target.value)
+       formField.align=event.target.value
+    }
           const removeImage=(image,index)=>{
             var imageArr=[];
             imageArr=preview;
@@ -252,6 +259,28 @@ const EditBanners = () => {
                        {thirdCat.name}
                      </MenuItem>
                    ))}
+                     
+                   </Select>
+                </div>
+                <div className="col">
+                   <h3 className="text-[14px] font-[500] mb-1 text-black "> Align</h3>
+                   <Select
+                     labelId="demo-simple-select-label"
+                     id="productSubCatDrop"
+                     size='small'
+                     className='w-full'
+                     value={align}
+                     label="Category"
+                     onChange={handleChangeAlign}
+                   >
+                   
+                     <MenuItem value={'left'}>
+                       Left
+                     </MenuItem>
+                      <MenuItem value={'right'}>
+                       Right
+                     </MenuItem>
+                  
                      
                    </Select>
                 </div>

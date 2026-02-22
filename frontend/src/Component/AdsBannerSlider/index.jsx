@@ -17,30 +17,14 @@ const AdsBannerSlider = (props) => {
           modules={[Navigation]}
           className="smlBtn"
         >
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525653108_NewProject(20).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525634299_NewProject(2).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525620831_NewProject(3).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734532742018_NewProject(22).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525653108_NewProject(20).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525634299_NewProject(2).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734525620831_NewProject(3).jpg'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-                <BannerBox img={'https://api.spicezgold.com/download/file_1734532742018_NewProject(22).jpg'}/>
-            </SwiperSlide>
+            {
+                props?.data?.map((item, index)=>{
+                     return(
+                        <SwiperSlide key={index}>
+                            <BannerBox info={item?.align} img={item?.images[0]}/>
+                        </SwiperSlide>
+                     )})
+                    }
          </Swiper>
      </div>
       

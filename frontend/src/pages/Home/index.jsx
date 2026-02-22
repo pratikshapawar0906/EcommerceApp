@@ -26,13 +26,17 @@ const Home = () => {
    const[popularProductData,setPopularProductData]=useState([]);
    const[allProducts,setAllProducts]=useState([]);
    const[allFeturedProducts,setAllFeturedProducts]=useState([]);
-  
+   const [bannerData,setBannerData]=useState([]);
        const Context=useContext(MyContext)
    
       
    useEffect(()=>{
       fetchDataFromApi('/api/homeSlider/get').then((res)=>{
         setHomeSlideData(res?.data)
+      })
+
+      fetchDataFromApi('/api/banner/get').then((res)=>{
+        setBannerData(res?.data)
       })
 
       fetchDataFromApi('/api/product/getAllProducts').then((res)=>{
@@ -149,8 +153,10 @@ const Home = () => {
               <p className='font-bold text-[30px]'> -Only $200</p>
             </div>
           </div>
-
-          <AdsBannerSlider items={4}/>
+         {
+           bannerData?.length !== 0 &&   <AdsBannerSlider items={4} data={bannerData}/>
+         }
+          
        </div>
       </section>
 

@@ -26,10 +26,11 @@ const BannerSchema=new mongoose.Schema({
       type:Number,
       default:''
     },
-    // align:{
-    //   type:number,
-    //   default:''
-    // },
+    align:{
+      type:String,
+      default:'',
+       require:true
+    },
     images:[
       {
         type: String,
