@@ -135,6 +135,101 @@ export const verifyEmailController = async (req, res) => {
   }
 }
 
+// register with goggle
+export const registerUserWithGoogleController = async (req, res) => {
+  try{
+    
+     const { name,email, password ,avatar,mobile,role } = req.body;
+    const existUser = await User.findOne({ email});
+
+
+    if(!existUser){
+      const user=await User.create({
+        name:name,
+        mobile:mobile,
+        email:email,
+        password:'null',
+        avatar:avatar,
+        role:role,
+        verify_email:true,
+        signUpWithGoogle:true
+      })
+
+      await user.save();
+ 
+     
+
+     const accesstoken= await  generatedAccessToken(user._id);
+      const refreshtoken= await  generatedRefreshToken(user._id);
+
+      await User.findByIdAndUpdate(user?._id,{
+        last_login_date: new Date()
+      })
+
+      const cookiesOption={
+        httpOnly :true,
+        secure:process.env.NODE_ENV === "production",
+        sameSite: "None"
+      }
+
+      res.cookie('accesstoken',accesstoken,cookiesOption)
+      res.cookie('refreshtoken',refreshtoken,cookiesOption)
+
+      res.status(200).json({
+      success: true,
+      error:false,
+      message: "Login successfully! ",
+      data: {
+       accesstoken,
+       refreshtoken
+       
+      },
+    });
+
+    }else{
+
+      const accesstoken= await  generatedAccessToken(existUser._id);
+      const refreshtoken= await  generatedRefreshToken(existUser._id);
+
+      await User.findByIdAndUpdate(existUser?._id,{
+        last_login_date: new Date()
+      })
+
+      const cookiesOption={
+        httpOnly :true,
+        secure:process.env.NODE_ENV === "production",
+        sameSite: "None"
+      }
+
+      res.cookie('accesstoken',accesstoken,cookiesOption)
+      res.cookie('refreshtoken',refreshtoken,cookiesOption)
+
+      res.status(200).json({
+      success: true,
+      error:false,
+      message: "Login successfully! ",
+      data: {
+       accesstoken,
+       refreshtoken
+       
+      },
+    });
+
+    }
+
+    
+    
+
+  }
+  catch(error){
+    console.error("Register error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || error,
+      error:true,
+    });
+  }
+}
 // login  Controller
 export const loginUser = async (req, res) => {
   try{
@@ -539,6 +634,7 @@ export const verifyForgotPasswordOtpController = async (req, res) => {
   }
 }
 
+//reset Password
 export const resetpasswordController =async(req,res)=>{
   try {
      
@@ -560,6 +656,20 @@ export const resetpasswordController =async(req,res)=>{
       })
     }
 
+    if(user?.signUpWithGoogle===false){
+        const checkPassword=await bcrypt.compare(oldPassword,user.password);
+        if(!checkPassword){
+          return res.status(400).json({
+            message:" Your Old Password is wrong",
+            success:false,
+            error:true
+          })
+        }
+    }
+
+    
+
+
     if(newPassword !== confirmPassword){
       return res.status(400).json({
         message:" newPassword and confirmPassword must be same",
@@ -572,7 +682,8 @@ export const resetpasswordController =async(req,res)=>{
     const hashPassword=await bcrypt.hash(newPassword,salt);
 
     const update=await User.findByIdAndUpdate(user._id,{
-      password :hashPassword
+      password :hashPassword,
+      signUpWithGoogle:false
     })
 
     return res.status(200).json({

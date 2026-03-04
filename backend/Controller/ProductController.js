@@ -1504,3 +1504,121 @@ export const getProductSizeByIdController = async (req, res) => {
 }
 
 
+export const ProductfilterController = async (req, res) => {
+  
+
+    const {catId, subCatId, thridSubCatId, minPrice,maxPrice,rating,page,limit}=req.body;
+
+    const filterProduct={}
+    
+    if(catId?.length){
+      filterProduct.catId={$in:catId}
+    }
+
+    if(subCatId?.length){
+      filterProduct.subCatId={$in:subCatId}
+    }
+
+    if(thridSubCatId?.length){
+      filterProduct.thridSubCatId={$in:thridSubCatId}
+    }
+    
+    if(minPrice || maxPrice){
+       filterProduct.price={$gte:+minPrice || 0 , $lte: +maxPrice || Infinity}
+    }
+
+    
+    if(rating?.length){
+      filterProduct.catId={$in:rating}
+    }
+
+  try {
+  
+    const product =await Product.find(filterProduct).populate("category").skip((page-1) * limit).limit(parseInt(limit));
+
+    const total=await Product.countDocuments(filterProduct);
+
+    if(!product){
+        res.status(400).json({
+            message:"Product  is not available",
+            error:true,
+            success:false
+        })
+    }
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Size Successfully",
+      success: true,
+      error:false,
+      data:product,
+      total:total,
+      page:parseInt(page),
+      totalPages:Math.ceil(total/limit)
+
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+
+const sortItems=(products,sortBy ,order)=>{
+  return products.sort((a,b)=>{
+      if(sortBy === 'name'){
+        return order === 'asc' ? a.name.localCompare(b.name) :
+        b.name.localCompare(a.name)
+      }
+
+      if(sortBy === 'price'){
+        return order === 'asc'
+            ? a.price - b.price
+            : b.price - a.price;
+      }
+
+      return 0;
+  })
+}
+
+export const ProductSortByController = async (req, res) => {
+  try {
+
+
+    const {products, sortBy,order}=req.body;
+    const sortedItems=sortItems([...products?.data],sortBy,order)
+    
+    if(!sortedItems){
+        res.status(400).json({
+            message:"Sorted Product  is not available",
+            error:true,
+            success:false
+        })
+    }
+
+    
+    
+
+    return  res.status(200).json({
+      message:"Getting Product Successfully",
+      success: true,
+      error:false,
+      data:sortedItems,
+      page:0,
+      totalPages:0
+    });
+    
+  } catch (error) {
+      console.error("Product Error:", error);
+    res.status(500).json({
+        success: false,
+        message: error.message || error,
+        error:true,
+    });
+  }
+}
+

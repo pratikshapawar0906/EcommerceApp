@@ -212,28 +212,33 @@ const MyAccount = () => {
                     <hr/>
 
                      <form className='mt-8' onSubmit={handleSubmitChangePassword}>
-                      <div className="flex items-center gap-5  ">
-                        <div className="w-[50%]">
-                              <TextField id="outlined-basic" label="Old Password" value={changePassword.oldPassword} variant="outlined"  type='password'
-                              className='w-full'  name='oldPassword' onChange={onChangeInput} disabled={isLoading2===true ? true:false} />
-                        </div>
+                      <div className="grid grid-cols-2 gap-5  ">
 
-                        <div className="w-[50%]">
+                        {
+                          Context?.userData?.signUpWithGoogle===false &&   
+                             <div className="col">
+                                 <TextField id="outlined-basic" label="Old Password" value={changePassword.oldPassword} variant="outlined"  type='password'
+                                 className='w-full'  name='oldPassword' onChange={onChangeInput} disabled={isLoading2===true ? true:false} />
+                            </div>
+                        }
+                       
+
+                        <div className="col">
                               <TextField id="outlined-basic" label="New Password" value={changePassword.newPassword} variant="outlined"  type='password'
                               className='w-full'  name='newPassword' onChange={onChangeInput} disabled={isLoading2===true ? true:false}/>
-                        </div>           
-                      </div>
+                        </div> 
 
-                      <div className="flex items-center mt-4 gap-5">
-                         <div className="w-[100%]">
+                        <div className="col">
                               <TextField id="outlined-basic" label="confirm Password" value={changePassword.confirmPassword} variant="outlined"  type='password'
                               className='w-full'  name='confirmPassword' onChange={onChangeInput} disabled={isLoading2===true ? true:false} />
-                        </div>
+                        </div>          
                       </div>
+
+                      
 
                       <br/>
                       <div className="flex items-center gap-4">
-                        <Button className='btn-org btn-lg w-[200px]' type="submit"  disabled={!valideValue2}>
+                        <Button className='btn-org btn-lg w-[200px]' type="submit"  >
                           {
                               isLoading2 === true ?  <CircularProgress color="inherit" /> 
                               :

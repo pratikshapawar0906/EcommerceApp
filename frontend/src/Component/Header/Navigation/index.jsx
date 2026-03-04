@@ -21,6 +21,10 @@ const Navigation = () => {
     const openCategoryPanel=(value)=>{
       setIsOpenCatPanel(value)
     }
+
+
+    
+  
   return (
     <>
     <nav >
@@ -41,7 +45,7 @@ const Navigation = () => {
                   catData?.length !== 0 && catData?.map((item,index)=>{
                       return(
                         <li className='list-none relative'key={index}>
-                    <Link to='/' className="link transition text-[14px] font-[500]">
+                    <Link to={`/productListing?catId=${item?._id}`} className="link transition text-[14px] font-[500]">
                     <Button className='link transition !font-[500] !text-[rgba(0,0,0,0.8)] hover:!text-[#ff5252]  !py-4'>{item?.name}</Button></Link>
 
                     {
@@ -54,7 +58,7 @@ const Navigation = () => {
                         return(
                           <li className='list-none w-full relative' key={index_}>
                         
-                          <Button   component={Link} className='!text-[rgba(0,0,0,0.8)] w-full !text-left !justify-start !rounded-none'>{subcat?.name}</Button>
+                          <Button   component={Link} to={`/productListing?subCatId=${subcat?._id}`} className='!text-[rgba(0,0,0,0.8)] w-full !text-left !justify-start !rounded-none'>{subcat?.name}</Button>
                           
                             {
                                  subcat?.children?.length  > 0 &&  <div className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white
@@ -65,7 +69,7 @@ const Navigation = () => {
                                         return(
                                              <li className='list-none w-full' key={index__}>
                                        
-                                       <Button   component={Link} className='!text-[rgba(0,0,0,0.8)] w-full !text-left !justify-start !rounded-none'>{ThridSub?.name}</Button>
+                                       <Button   component={Link} to={`/productListing?thridSubCatId=${ThridSub?._id}`} className='!text-[rgba(0,0,0,0.8)] w-full !text-left !justify-start !rounded-none'>{ThridSub?.name}</Button>
                                        
                                      </li>
                                         )

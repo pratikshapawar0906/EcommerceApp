@@ -8,6 +8,10 @@ import { FcGoogle } from "react-icons/fc";
 import { MyContext } from '../../App';
 import { postData } from '../../utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { FirebaseApp } from '../../firebase'
+const auth = getAuth(FirebaseApp);
+const googleProvider=new GoogleAuthProvider();
 
 const Login = () => {
     const Context=useContext(MyContext)
@@ -100,6 +104,59 @@ const Login = () => {
         });
        }
 
+       const signUpWithGoogle=()=>{
+             signInWithPopup(auth, googleProvider)
+         .then((result) => {
+           // This gives you a Google Access Token. You can use it to access the Google API.
+           const credential = GoogleAuthProvider.credentialFromResult(result);
+           const token = credential.accessToken;
+           // The signed-in user info.
+           const user = result.user;
+           
+           // IdP data available using getAdditionalUserInfo(result)
+           // ...
+       
+           const fields={
+               name:user.providerData[0].displayName,
+               email:user.providerData[0].email,
+               password:null,
+               avatar:user.providerData[0].photoURL,
+               mobile:user.providerData[0].phoneNumber,
+               role:"user"
+       
+           }
+       
+            postData("/api/user/registerwithGoggle", fields).then((res)=>{
+              if(res?.success){    
+              Context.alertBox( "success",  res?.message );
+              localStorage.setItem("userEmail",fields.email)
+              setIsLoading(false); 
+               localStorage.setItem("accesstoken",res?.data?.accesstoken)
+               localStorage.setItem("refreshtoken",res?.data?.refreshtoken)
+               setIsLoading(true);
+              history('/')
+           
+           } else {
+              Context.alertBox( "error",  res?.message );
+              setIsLoading(false); 
+           }
+             
+            }).catch((err) => {
+             Context.alertBox( "error","Server error!" );
+             console.error(err);
+           });
+         }).catch((error) => {
+           // Handle Errors here.
+           const errorCode = error.code;
+           const errorMessage = error.message;
+           // The email of the user's account used.
+           const email = error.customData.email;
+           // The AuthCredential type that was used.
+           const credential = GoogleAuthProvider.credentialFromError(error);
+           // ...
+         });
+          }
+
   return (
     <>
         <section className="section py-10">
@@ -143,8 +200,8 @@ const Login = () => {
 
                     <p className='text-center font-[500]'>Or continue with social account</p>
 
-                    <Button className='flex gap-3 w-full !bg-[#f1f1f1] btn-lf !text-[#000]'>
-                        <FcGoogle className='text-[20px]'/>Login with Google</Button>
+                    <Button className='flex gap-3 w-full !bg-[#f1f1f1] btn-lf !text-[#000]'  onClick={signUpWithGoogle}>
+                        <FcGoogle className='text-[20px]'/>Sign In with Google</Button>
                 </form>
                 </div>
             </div>

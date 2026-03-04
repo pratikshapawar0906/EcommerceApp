@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createProduct, createProductRAMS, createProductSize, createProductWeight, deleteMultipleProduct, deleteMultipleProductRAMS, deleteMultipleProductSize, deleteMultipleProductWeight, deleteProductController, deleteProductRAMSController, deleteProductSizeController, deleteProductWeightController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRAMSController, getAllProductRatingController, getAllProductSizeController, getAllProductWeightController, getProductController, getProductRAMSByIdController, getProductSizeByIdController, getProductWeightByIdController, removeImageFromProductController, updateProductController, updateProductRAMSController, updateProductSizeController, updateProductWeightController, uploadImagesController } from "../Controller/ProductController.js"
+import { createProduct, createProductRAMS, createProductSize, createProductWeight, deleteMultipleProduct, deleteMultipleProductRAMS, deleteMultipleProductSize, deleteMultipleProductWeight, deleteProductController, deleteProductRAMSController, deleteProductSizeController, deleteProductWeightController, getAllCatByCatIdController, getAllCatByCatNameController, getAllCatBySubCatIdController, getAllCatBySubCatNameController, getAllCatByThridSubCatIdController, getAllCatByThridSubCatNameController, getAllCategoryController, getAllProductCountController, getAllProductFeaturedController, getAllProductRAMSController, getAllProductRatingController, getAllProductSizeController, getAllProductWeightController, getProductController, ProductfilterController, getProductRAMSByIdController, getProductSizeByIdController, getProductWeightByIdController, removeImageFromProductController, updateProductController, updateProductRAMSController, updateProductSizeController, updateProductWeightController, uploadImagesController, ProductSortByController } from "../Controller/ProductController.js"
 import { auth } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.js";
 
@@ -45,5 +45,9 @@ router.get('/getProductsSize/:id',getProductSizeByIdController);
 router.put('/updateProductSize/:id',auth,updateProductSizeController);
 router.delete('/deleteProductSize/:id', deleteProductSizeController)
 router.delete('/deleteMultipleProductSize', deleteMultipleProductSize)
+
+//filter Product
+router.post('/Productfilter',ProductfilterController);
+router.post('/SortBy',ProductSortByController);
 
 export default router

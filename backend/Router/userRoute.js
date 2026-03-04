@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { forgotPasswordController, loginUser, logoutUser, refreshTokenController, registerUser, removeImageFromCloudinary, 
+import { forgotPasswordController, loginUser, logoutUser, refreshTokenController, registerUser, registerUserWithGoogleController, removeImageFromCloudinary, 
      resetpasswordController, updateUserDetails, userAvatarController, usertDetailsController,verifyEmailController,
       verifyForgotPasswordOtpController } from "../Controller/UserController.js";
 import { auth } from "../middleware/auth.js";
@@ -9,6 +9,7 @@ const router=Router()
 
 //register User
 router.post('/register', registerUser );
+router.post('/registerwithGoggle', registerUserWithGoogleController );
 router.post('/verifyEmail', verifyEmailController );
 router.post('/login', loginUser );
 router.get('/logout',auth, logoutUser );

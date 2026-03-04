@@ -5,7 +5,7 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import { FaRegHeart } from "react-icons/fa";
 import { IoMdGitCompare } from "react-icons/io";
-import { MdOutlineZoomOutMap } from "react-icons/md";
+import { MdOutlineShoppingCart, MdOutlineZoomOutMap } from "react-icons/md";
 import { FaShareFromSquare } from "react-icons/fa6";
 import { MyContext } from '../../App';
 
@@ -59,8 +59,8 @@ const ProductItem = (props) => {
               </Button>
             </div>
         </div>
-        <div className="info p-3 py-5 ">
-           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.name?.substr(0,40+'...')}</Link></h6>
+        <div className="info p-3 py-5 relative pb-[50px] h-[190px]">
+           <h6 className='text-[20px]  title mt-1 !font-[500] text-[rgba(0,0,0,0.9)]'><Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.name?.substr(0,30)+'...'}</Link></h6>
            <h5 className='text-[17px] mb-1 text-[rgba(77, 173, 89, 0.1)]'> <Link to={`/productDetails/${props?.item?._id}`} className='link transition-all'>{props?.item?.brand}</Link></h5>
 
            
@@ -69,6 +69,12 @@ const ProductItem = (props) => {
            <div className="flex items-center gap-4">
             <span className='OldPrice line-through text-gray-500 text-[15px] font-[500]'>&#x20b9;{props?.item?.oldPrice}</span>
              <span className='Price text-[#ff5252] text-[15px] font-[600]'>&#x20b9;{props?.item?.price}</span>
+           </div>
+
+           <div className="!absoute bottom-[15px] left-0 pl-2 pr-2 w-full">
+               <Button  className='btn-org btn-border flex w-full btn-sm gap-2' size="small" >
+                <MdOutlineShoppingCart className='text-[18px]'/> Add to Cart
+               </Button>
            </div>
 
 

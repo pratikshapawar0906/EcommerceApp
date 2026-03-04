@@ -215,7 +215,7 @@ footer form input::placeholder{
   transition:height 400ms;
 }
 
-.itemViewAction  button  svg{
+.itemViewAction  button:active  svg{
   color: #ff5252 !important;
   opacity: 1;
 }

@@ -221,6 +221,38 @@ const Sidebar = () => {
                 </Collapse>
             
           </li>
+
+          <li className="">
+            
+            <Button className='text-[14px] w-full !capitalize !justify-start flex gap-3 !text-[rgba(0,0,0,0.8)]
+            !font-[500] items-center !py-2 hover:!bg-[#f1f1f1]'  onClick={()=>isOpenSubMenu(6)}>
+              <RiProductHuntLine className='text-[20px] ' /><span className=""> Blog List</span>
+              <span className="ml-auto block w-[30px] h-[30px] flex items-center justify-center"
+                ><FaAngleDown className={` transition-all ${subMenuIndex === 6 ? 'rotate-180' :''}`}/></span></Button>
+
+                <Collapse in={subMenuIndex === 6 ? true : false}>
+                <ul className='w-full'>
+                  <li className="w-full">
+                    
+                    <Button className='!text-[rgba(0,0,0,0.7)] !capitalize !justify-start !w-full
+                    !text-[13px] !font-[500] !pl-9 flex gap-3' onClick={()=>Context.setIsOpenFullScreenPanel({
+                       open:true,
+                       model:'Add Blog'
+                     })}> <span className='block w-[5px] h-[5px] rounded-full bg-[rgba(0,0,0,0.8)]'></span>Blog Upload</Button>
+                    
+                  </li>
+                  <li className="w-full">
+                    <Link to='/blog/List'>
+                    <Button className='!text-[rgba(0,0,0,0.7)] !capitalize !justify-start !w-full
+                     !text-[13px] !font-[500] !pl-9 flex gap-3'><span className='block w-[5px] h-[5px] rounded-full bg-[rgba(0,0,0,0.8)]'></span> Banner List</Button>
+                     </Link>
+                  </li>
+
+                  
+                </ul>
+                </Collapse>
+            
+          </li>
           <li className="">
             <Link to='/logout'>
             <Button className='text-[14px] w-full !capitalize !justify-start flex gap-3 !text-[rgba(0,0,0,0.8)]
