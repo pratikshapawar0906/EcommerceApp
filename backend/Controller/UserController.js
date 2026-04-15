@@ -7,6 +7,7 @@ import { generatedAccessToken } from "../utils/generatedAccessToken.js";
 import { generatedRefreshToken } from "../utils/generatedRefreshToken.js";
 import fs from 'fs'
 import cloudinary from "../middleware/cloudinary.js";
+import Review from "../model/ReviewSchema.js";
 
 // register Controller
 export const registerUser = async (req, res) => {
@@ -782,62 +783,72 @@ export const usertDetailsController =async(req,res)=>{
   }
 }
 
-// export const resetpasswordController =async(req,res)=>{
-//   try {
+// review controllerv
+export const  addReviewController=async(req,res)=>{
+  try {
      
-//     const {email,oldPassword, newPassword, confirmPassword}=req.body;
+    const {image,userName,review,rating,userId, productId}=req.body;
+    
+    const userReview=new Review({
+      image:image,
+      userName:userName,
+      review:review,
+      rating:rating,
+      userId:userId,
+      productId: productId
+    })
 
-//     if(!email || !newPassword || !confirmPassword){
-//       return res.status(400).json({
-//         message:"Provide Required Fileds email, newPassword, confirmPassword"
-//       })
-//     }
+    
+    await userReview.save();
+    
 
-//     const user= await User.findOne({email:email}).select('+password');
+    return res.status(200).json({
+        message: " Review added Succesfully",
+        success:true,
+        error:false
+     })
 
-//     if(!user){
-//       return res.status(400).json({
-//         message:" Email is not  available",
-//         success:false,
-//         error:true
-//       })
-//     }
+  } catch (error) {
+      return res.status(500).json({
+         message: error.message|| error,
+         success:false,
+         error:error
+      })
+  }
+}
 
-//     const checkPassword=await bcrypt.compare(oldPassword,user.password);
-//     if(!checkPassword){
-//       return res.status(400).json({
-//         message:" Your Old Password is wrong",
-//         success:false,
-//         error:true
-//       })
-//     }
+//get reviews
 
-//     if(newPassword !== confirmPassword){
-//       return res.status(400).json({
-//         message:" newPassword and confirmPassword must be same",
-//         success:false,
-//         error:true
-//       })
-//     }
+export const  getReviewsController=async(req,res)=>{
+  try {
+     
+    const  productId=req.query.productId
+    
+    const reviews= await Review.find({
+       productId:productId
+    })
 
-//     const salt= await bcrypt.genSalt(10);
-//     const hashPassword=await bcrypt.hash(newPassword,salt);
+    if(!reviews){
+       return res.status(400).json({
+        success:true,
+        error:false
+     })  
+    }
+    
+    
 
-//     const update=await User.findByIdAndUpdate(user._id,{
-//       password :hashPassword
-//     })
+    return res.status(200).json({
+        message: " Review fetched Succesfully",
+        success:true,
+        error:false,
+        reviews:reviews
+     })
 
-//     return res.status(200).json({
-//         message: "Password Update Succesfully",
-//         success:true,
-//         error:false
-//      })
-
-//   } catch (error) {
-//       return res.status(500).json({
-//          message: error.message|| error,
-//          success:false,
-//          error:error
-//       })
-//   }
-// }
+  } catch (error) {
+      return res.status(500).json({
+         message: error.message|| error,
+         success:false,
+         error:error
+      })
+  }
+}

@@ -363,3 +363,7 @@ button .css-gxw4l9-MuiCircularProgress-root {
   width: 1200px !important;
   max-width: 1200px !important;
 }
+
+.MuiCircularProgress-root {
+  color: #ff5252 !important;
+}

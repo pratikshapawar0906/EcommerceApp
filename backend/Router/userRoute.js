@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { forgotPasswordController, loginUser, logoutUser, refreshTokenController, registerUser, registerUserWithGoogleController, removeImageFromCloudinary, 
+import { addReviewController, forgotPasswordController, getReviewsController, loginUser, logoutUser, refreshTokenController, registerUser, registerUserWithGoogleController, removeImageFromCloudinary, 
      resetpasswordController, updateUserDetails, userAvatarController, usertDetailsController,verifyEmailController,
       verifyForgotPasswordOtpController } from "../Controller/UserController.js";
 import { auth } from "../middleware/auth.js";
@@ -21,5 +21,9 @@ router.post('/verify-forgot-password',verifyForgotPasswordOtpController)
 router.post('/reset-password',resetpasswordController)
 router.post('/refresh-token',refreshTokenController)
 router.get('/userDetails',auth,usertDetailsController)
+
+//review of user
+router.post('/addReview',auth,addReviewController)
+router.get('/getReviews',getReviewsController)
 
 export default router

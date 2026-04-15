@@ -18,7 +18,7 @@ const ProductDetailsModel = (props) => {
                   Brands : <span className="font-[500] text-black opacity-75">{props?.item?.brand}</span>
                 </span>
                 <Rating name="size-small" defaultValue={props?.item?.rating} size="small" readOnly />
-                <span className="text-[13px] cursor-pointer color-">Review (5)</span>
+                <span className="text-[13px] cursor-pointer color-" onClick={props.gotoReviews}>Review ({props.reviewCount})</span>
               </div>
                <div className="flex items-center gap-4 mt-4">
                 <span className='OldPrice line-through text-gray-5000 text-[18px] font-[500]'>&#x20b9;{props?.item?.oldPrice}</span>
