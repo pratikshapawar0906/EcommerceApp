@@ -1,12 +1,12 @@
 import CartProduct from "../model/cartProductSchema.js";
-import User from "../model/UserSchema.js";
+
 
 
 export const addToCartItemController=async(req,res)=>{
   try {
 
     const userId=req.userId
-    const { productId }=req.body
+    const { productId,productTitle,image, rating,price,subTotal,quantity,countInStock }=req.body
 
     if(!productId){
         return res.status(404).json({
@@ -30,25 +30,28 @@ export const addToCartItemController=async(req,res)=>{
     }
 
      const checkItem= new CartProduct({
-        quantity:1,
+        quantity:quantity,
         userId:userId,
-        productId:productId
+        productId:productId,
+        productTitle:productTitle,
+        image:image,
+        rating:rating,
+        price:price,
+        subTotal:subTotal,
+        countInStock:countInStock
+
     })   
 
  
-    await checkItem.save();
+    const save=await checkItem.save();
 
-    const updateCartUser=await User.updateOne({_id:userId},{
-        $push:{
-            shopping_cart:productId
-        }
-    })
+    
 
     return  res.status(200).json({
           message:" Cart Item Added Successfully",
           success: true,
           error:false,
-          checkItem:checkItem
+          data:save
         });
     
   } catch (error) {
@@ -67,15 +70,8 @@ export const getCartItemController=async(req,res)=>{
     
     const cartItem=await CartProduct.find({
         userId:userId,
-    }).populate("productId")  
+    })  
 
-    if(!cartItem){
-        return res.status(404).json({
-            message:"Provide productId",
-            error:true,
-            success: false,
-        })
-    }
 
 
     return  res.status(200).json({
@@ -162,21 +158,14 @@ export const deleteCartItemQtyController=async(req,res)=>{
         })
     }
 
-    const  user=await User.findOne({_id:userId})
-
-    const cartItems=user?.shopping_cart;
-
-    const updateUserCart=[...cartItems.slice(0,cartItems.indexOf(productId)),
-        ...cartItems.slice(cartItems.indexOf(productId)+ 1)];
-
-    user.shopping_cart=updateUserCart;
-    await user.save()
+    
+    
 
     return  res.status(200).json({
           message:"Delete Cart Items Successfully",
           success: true,
           error:false,
-          user:user
+          data:deleteCartItem
         });
     
   } catch (error) {

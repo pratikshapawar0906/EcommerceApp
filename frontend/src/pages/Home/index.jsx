@@ -34,22 +34,28 @@ const Home = () => {
    useEffect(()=>{
       fetchDataFromApi('/api/homeSlider/get').then((res)=>{
         setHomeSlideData(res?.data)
+        console.log(res?.data)
       })
 
       fetchDataFromApi('/api/blog/get').then((res)=>{
         setAllBlogData(res?.data)
+        console.log(res?.data)
+
       })
 
       fetchDataFromApi('/api/banner/get').then((res)=>{
         setBannerData(res?.data)
+         console.log(res?.data)
       })
 
       fetchDataFromApi('/api/product/getAllProducts').then((res)=>{
         setAllProducts(res?.data)
+         console.log(res?.data)
       })
 
        fetchDataFromApi('/api/product/getProdFeatured').then((res)=>{
         setAllFeturedProducts(res?.product)
+        console.log(res?.product)
       })
 
       

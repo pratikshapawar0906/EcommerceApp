@@ -52,6 +52,7 @@ const Header = () => {
       Context.setIsLogin(false);
        localStorage.removeItem("accesstoken")
        localStorage.removeItem("refreshtoken")
+       Context.setUserData(null);
       Context.alertBox("success", "Logged out successfully");
       history('/')
   }).catch ((error)=> {

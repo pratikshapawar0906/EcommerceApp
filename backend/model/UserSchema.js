@@ -57,12 +57,12 @@ const userSchema=new mongoose.Schema({
       },
     ],
 
-    shopping_cart: [
-        {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "cartProduct",
-      },
-    ],
+    // shopping_cart: [
+    //     {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "cartProduct",
+    //   },
+    // ],
 
     status: {
       type: String,

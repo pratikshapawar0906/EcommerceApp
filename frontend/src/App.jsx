@@ -107,6 +107,14 @@ const App = () => {
     }
     
   }
+
+  const addToCart=(productId,userId)=>{
+    if(userId === undefined){
+       alertBox("error","Your are  not login please login first")
+       return false;
+    }
+     
+  }
   
   const Values={
     setOpenProductDetailsModel,
@@ -121,7 +129,8 @@ const App = () => {
     setAddress,
     catData,
     setCatData,
-    handleOpenProductDetailsModel
+    handleOpenProductDetailsModel,
+    addToCart
     
   }
   return (

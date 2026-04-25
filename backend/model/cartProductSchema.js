@@ -2,8 +2,28 @@ import mongoose from "mongoose";
 
 
 const cartProductSchema= new mongoose.Schema({
+    productTitle: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+     rating: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    subTotal:{
+      type:Number,
+      required:true
+    },
     productId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Product",
       required: true,
     },
@@ -11,13 +31,17 @@ const cartProductSchema= new mongoose.Schema({
         type: Number,
          default: 1 
     },
-     userId: [
+    countInStock:{
+      type:Number,
+      required:true
+    },
+    userId: 
       {
-        type: mongoose.Schema.Types.ObjectId,
-        default: "",
-        ref:"User"
+        type:String,
+        required:true
+        
       },
-    ],
+    
 },
 {
     timestamps: true,

@@ -27,18 +27,16 @@ export const fetchDataFromApi = async (url) => {
   try {
     const token = localStorage.getItem("accesstoken");
 
-    if (!token) {
-      return { success: false, message: "No token found" };
-    }
+    const headers = token
+      ? { Authorization: `Bearer ${token}` }
+      : {}; // 
 
-    const response = await axios.get(apiUrl + url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(apiUrl + url, { headers });
+
     return response.data;
   } catch (error) {
-    throw error;
+    console.error("API Error:", error);
+    return null;
   }
 };
 
