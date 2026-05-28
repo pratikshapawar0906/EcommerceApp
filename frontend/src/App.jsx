@@ -22,7 +22,7 @@ import Checkout from './pages/Checkout'
 import MyAccount from './pages/MyAccount'
 import MyList from './pages/Mylist'
 import Orders from './pages/Orders'
-import { fetchDataFromApi } from './utils/api'
+import { fetchDataFromApi, postData } from './utils/api'
 import AddAddress from './pages/MyAccount/AddAddress'
 
 
@@ -108,11 +108,25 @@ const App = () => {
     
   }
 
-  const addToCart=(productId,userId)=>{
+  const addToCart=(product,userId)=>{
     if(userId === undefined){
        alertBox("error","Your are  not login please login first")
        return false;
     }
+
+    const data={
+      productTitle:product?.name,
+      image:product?.images[0],
+      rating:product?.rating,
+      price:price,
+      quantity:1,
+      subTotal:'',
+      productId:product?._id,
+      countInStock:product?.countInStock,
+      userId:userId
+    }
+
+    postData('/api/cartProduct/add',)
      
   }
   

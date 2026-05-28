@@ -13,8 +13,8 @@ import { MyContext } from '../../App';
 const ProductItem = (props) => {
 
   const Context=useContext( MyContext)
-  const addToCart=(productId,userId)=>{
-   Context.addToCart(productId,userId);
+  const addToCart=(product,userId)=>{
+      Context.addToCart(product,userId);
   }
   
   return (
@@ -75,7 +75,7 @@ const ProductItem = (props) => {
            </div>
 
            <div className="!absoute bottom-[15px] left-0 pl-2 pr-2 w-full">
-               <Button  className='btn-org btn-border flex w-full btn-sm gap-2' size="small" onClick={()=>addToCart(props?.item?._id, Context?.userData?._id)}>
+               <Button  className='btn-org btn-border flex w-full btn-sm gap-2' size="small" onClick={()=>addToCart(props?.item, Context?.userData?._id)}>
                 <MdOutlineShoppingCart className='text-[18px]'/> Add to Cart
                </Button>
            </div>

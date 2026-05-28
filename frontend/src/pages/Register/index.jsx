@@ -32,6 +32,11 @@ const Register = () => {
     })
    }
 
+
+   useEffect(()=>{
+           window.scrollTo(0,0)
+       },[])
+
     const valideValue=Object.values(formFields).every(el=>el);
 
    const handleSubmit=(e)=>{
